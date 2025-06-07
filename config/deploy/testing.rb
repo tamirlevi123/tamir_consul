@@ -120,6 +120,16 @@ namespace :deploy do
       end
     end
   end
+
+  desc "Restart application with Docker Compose"
+  task :restart do
+    on roles(:app) do
+      within release_path do
+        execute :docker, "compose down"
+        execute :docker, "compose up --build -d"
+      end
+    end
+  end
 end
 
 # Add load_env to more deployment hooks
@@ -127,6 +137,8 @@ before 'deploy:starting', 'deploy:testing:configure_ssh'
 before 'deploy:migrate', 'deploy:testing:verify_env'
 before 'deploy:migrate', 'deploy:testing:debug_env'
 before 'deploy:migrate', 'deploy:testing:check_env_file'
+
+after 'deploy:publishing', 'deploy:restart'
 
 set :deploy_via, :copy
 
@@ -136,23 +148,26 @@ set :deploy_via, :copy
 set :scm, :git
 set :repo_url, 'git@github.com:tamirlevi123/tamir_consul.git'
 
-namespace :puma do
-  desc 'Debug Puma environment before start/restart'
-  task :debug_env do
-    on roles(:app) do
-      within release_path do
-        execute :echo, '=== [PUMA DEBUG] Current working directory ==='
-        execute :pwd
-        execute :echo, '=== [PUMA DEBUG] Contents of config/puma ==='
-        execute :ls, '-l', "#{release_path}/config/puma/"
-        # Use Capistrano's logger to avoid shell issues with parentheses
-        info "[PUMA DEBUG] fetch(:puma_conf) = #{fetch(:puma_conf)}"
-      end
-    end
-  end
-end
+# Remove Puma-specific settings/tasks for Docker deployment
+# (Remove or comment out any set :puma_port, :puma_conf, and Puma hooks)
 
-before 'puma:start', 'puma:debug_env'
-before 'puma:restart', 'puma:debug_env'
+# namespace :puma do
+#   desc 'Debug Puma environment before start/restart'
+#   task :debug_env do
+#     on roles(:app) do
+#       within release_path do
+#         execute :echo, '=== [PUMA DEBUG] Current working directory ==='
+#         execute :pwd
+#         execute :echo, '=== [PUMA DEBUG] Contents of config/puma ==='
+#         execute :ls, '-l', "#{release_path}/config/puma/"
+#         # Use Capistrano's logger to avoid shell issues with parentheses
+#         info "[PUMA DEBUG] fetch(:puma_conf) = #{fetch(:puma_conf)}"
+#       end
+#     end
+#   end
+# end
 
-set :puma_conf, "#{release_path}/config/puma/testing.rb" 
+# before 'puma:start', 'puma:debug_env'
+# before 'puma:restart', 'puma:debug_env'
+
+# set :puma_conf, "#{release_path}/config/puma/testing.rb" 
