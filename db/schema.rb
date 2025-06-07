@@ -231,10 +231,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_13_014205) do
     t.boolean "allow_custom_content", default: false
     t.text "latitude"
     t.text "longitude"
-    t.integer "geozone_id"
     t.integer "max_ballot_lines", default: 1
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
+    t.integer "geozone_id"
     t.index ["geozone_id"], name: "index_budget_headings_on_geozone_id"
     t.index ["group_id"], name: "index_budget_headings_on_group_id"
   end
@@ -1773,11 +1773,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_13_014205) do
   add_foreign_key "budget_valuators", "budgets"
   add_foreign_key "budget_valuators", "valuators"
   add_foreign_key "dashboard_administrator_tasks", "users"
+  add_foreign_key "dashboard_administrator_tasks", "users"
   add_foreign_key "dashboard_executed_actions", "dashboard_actions", column: "action_id"
+  add_foreign_key "dashboard_executed_actions", "dashboard_actions", column: "action_id"
+  add_foreign_key "dashboard_executed_actions", "proposals"
   add_foreign_key "dashboard_executed_actions", "proposals"
   add_foreign_key "documents", "users"
   add_foreign_key "failed_census_calls", "poll_officers"
   add_foreign_key "failed_census_calls", "users"
+  add_foreign_key "flags", "users"
   add_foreign_key "flags", "users"
   add_foreign_key "follows", "users"
   add_foreign_key "geozones_polls", "geozones"
@@ -1801,6 +1805,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_13_014205) do
   add_foreign_key "poll_partial_results", "poll_questions", column: "question_id"
   add_foreign_key "poll_partial_results", "users", column: "author_id"
   add_foreign_key "poll_question_answer_videos", "poll_question_answers", column: "answer_id"
+  add_foreign_key "poll_question_answers", "poll_questions", column: "question_id"
   add_foreign_key "poll_question_answers", "poll_questions", column: "question_id"
   add_foreign_key "poll_questions", "polls"
   add_foreign_key "poll_questions", "proposals"
