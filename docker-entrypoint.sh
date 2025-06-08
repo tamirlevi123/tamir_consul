@@ -1,5 +1,7 @@
 #!/bin/sh -x
 
+BUNDLE_PATH=${BUNDLE_PATH:-/usr/local/bundle}
+
 USER_UID=$(stat -c %u /var/www/consul/Gemfile)
 USER_GID=$(stat -c %g /var/www/consul/Gemfile)
 
