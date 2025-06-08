@@ -86,12 +86,12 @@ group :test do
 end
 
 group :development do
-  gem "capistrano", "~> 3.19.2", require: false
-  gem "capistrano-bundler", "~> 2.1.1", require: false
-  gem "capistrano-npm", "~> 1.0.3", require: false
-  gem "capistrano-rails", "~> 1.7.0", require: false
-  gem "capistrano3-delayed-job", "~> 1.7.6"
-  gem "capistrano3-puma", "~> 6.0.0"
+  gem 'capistrano', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rbenv', require: false
+  gem 'capistrano3-delayed-job', '~> 1.7.6'
+  gem 'capistrano3-puma', '~> 6.0.0'
   gem "erb_lint", "~> 0.9.0", require: false
   gem "faraday-retry", "~> 2.3.1", require: false
   gem "htmlbeautifier", "~> 1.4.3", require: false
