@@ -1,0 +1,12 @@
+[Unit]
+Description=Puma HTTP Server Accept Sockets for <%= fetch(:application) %> (<%= fetch(:stage) %>)
+
+[Socket]
+ListenStream=/home/azureuser/apps/consul231/shared/tmp/sockets/puma.sock
+Accept=no
+ReusePort=true
+Backlog=1024
+SyslogIdentifier=puma_socket
+
+[Install]
+WantedBy=sockets.target 
