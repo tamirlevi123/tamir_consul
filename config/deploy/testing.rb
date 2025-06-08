@@ -51,8 +51,11 @@ set :ssh_options, {
   forward_agent: true,
   auth_methods: %w(publickey),
   user: 'azureuser',
-  keys: %w(/home/tamir/.ssh/id_rsa_testing_new),
-  port: 22
+  keys: %w(/home/consul/.ssh/id_rsa_testing_new),
+  port: 22,
+  paranoid: false,
+  config: false,
+  user_known_hosts_file: '/dev/null'
 }
 
 # Skip RVM hook
@@ -125,8 +128,7 @@ namespace :deploy do
   task :restart do
     on roles(:app) do
       within release_path do
-        execute :docker, "compose down"
-        execute :docker, "compose up --build -d"
+        # Removed Docker Compose commands; not needed for Capistrano VM deployment
       end
     end
   end
