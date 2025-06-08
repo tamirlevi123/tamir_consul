@@ -2,7 +2,7 @@
 lock "~> 3.19.1"
 
 def deploysecret(key, default: "")
-  @deploy_secrets_yml ||= YAML.load_file("config/deploy-secrets.yml", aliases: true)[fetch(:stage).to_s]
+  @deploy_secrets_yml ||= YAML.load_file(fetch(:deploy_secrets_file), aliases: true)[fetch(:stage).to_s]
   @deploy_secrets_yml.fetch(key.to_s, default)
 end
 
