@@ -15,7 +15,7 @@ def main_deploy_server
 end
 
 set :rails_env, fetch(:stage)
-set :default_env, { EXECJS_RUNTIME: "Disabled" }
+# set :default_env, { EXECJS_RUNTIME: "Disabled" }
 set :rvm1_map_bins, -> { fetch(:rvm_map_bins).to_a.concat(%w[rake gem bundle ruby]).uniq }
 
 set :application, deploysecret(:app_name, default: "consul")
@@ -51,7 +51,7 @@ set :fnm_map_bins, %w[node npm rake yarn]
 
 set :puma_systemctl_user, :user
 set :puma_enable_socket_service, true
-set :puma_service_unit_env_vars, ["EXECJS_RUNTIME=Disabled"]
+# set :puma_service_unit_env_vars, ["EXECJS_RUNTIME=Disabled"]
 set :puma_service_unit_name, -> { "puma_#{fetch(:application)}_#{fetch(:stage)}" }
 set :puma_bind, "unix://#{shared_path}/tmp/sockets/puma.sock"
 set :puma_access_log, -> { File.join(shared_path, "log", "puma_access.log") }
@@ -124,7 +124,7 @@ task :map_node_bins do
   on roles(:app) do
     within release_path do
       with rails_env: fetch(:rails_env) do
-        prefix = -> { "EXECJS_RUNTIME='' #{fetch(:fnm_path)}/fnm exec" }
+        prefix = -> { "#{fetch(:fnm_path)}/fnm exec" }
 
         fetch(:fnm_map_bins).each do |command|
           SSHKit.config.command_map.prefix[command.to_sym].unshift(prefix)
