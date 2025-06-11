@@ -15,26 +15,26 @@ Description=Puma HTTP Server for <%= "#{fetch(:application)} (#{fetch(:stage)})"
 After=network.target
 
 [Service]
-Type=<%= service_unit_type %>
+Type=simple
 WatchdogSec=0
-<%="User=#{puma_user(@role)}" if fetch(:puma_systemctl_user) == :system %>
-WorkingDirectory=<%= current_path %>
-ExecStart=<%= expanded_bundle_command %> exec puma -e <%= fetch(:puma_env) %>
-ExecReload=/bin/kill -USR1 $MAINPID
-<%- Array(fetch(:puma_service_unit_env_files)).each do |file| %>
-<%="EnvironmentFile=#{file}" -%>
-<% end -%>
-<% Array(fetch(:puma_service_unit_env_vars)).each do |environment_variable| %>
-<%="Environment=\"#{environment_variable}\"" -%>
-<% end -%>
 
-# if we crash, restart
+WorkingDirectory=<%= current_path %>
+Environment=PATH=/home/azureuser/.rvm/gems/ruby-3.3.8/bin:/home/azureuser/.rvm/gems/ruby-3.3.8@global/bin:/home/azureuser/.rvm/rubies/ruby-3.3.8/bin:/home/azureuser/.rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Environment=GEM_HOME=/home/azureuser/apps/consul231/shared/bundle
+Environment=BUNDLE_PATH=/home/azureuser/apps/consul231/shared/bundle
+Environment=RAILS_ENV=testing
+Environment=RACK_ENV=testing
+
+ExecStart=/home/azureuser/.rvm/gems/ruby-3.3.8/bin/bundle exec puma -C config/puma/testing.rb
+ExecReload=/bin/kill -USR1 $MAINPID
+
 RestartSec=1
 Restart=on-failure
 
-<%="StandardOutput=append:#{fetch(:puma_access_log)}" if fetch(:puma_access_log) %>
-<%="StandardError=append:#{fetch(:puma_error_log)}" if fetch(:puma_error_log) %>
+StandardOutput=append:/home/azureuser/apps/consul231/shared/log/puma_access.log
+StandardError=append:/home/azureuser/apps/consul231/shared/log/puma_error.log
 
 SyslogIdentifier=puma
+
 [Install]
-WantedBy=<%=(fetch(:puma_systemctl_user) == :system) ? "multi-user.target" : "default.target"%>
+WantedBy=default.target
