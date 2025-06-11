@@ -1,0 +1,276 @@
+<%= content_for :head do %>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/vendor/perfect-scrollbar.min.css" />
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0; width: 100%; height: 100%;
+      overflow: auto;
+      background: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 340px;
+      border-radius: 8px;
+      position: relative;
+    }
+    .close-modal {
+      color: #aaa;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .speech-bubble-icon {
+      display: none;
+      margin: 8px auto 0 auto;
+      width: 32px;
+      height: 32px;
+      transform: rotate(180deg);
+      cursor: pointer;
+      transition: filter 0.2s;
+    }
+    .selected-node .speech-bubble-icon {
+      display: block;
+    }
+    .speech-bubble-icon:hover {
+      filter: brightness(0.8);
+    }
+    .nodeExample1 {
+      min-width: 120px;
+      min-height: 40px;
+      text-align: center;
+      border-radius: 18px;
+      background: #f8f9fa;
+      border: 2px solid #bdbdbd;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 10px 16px;
+      transition: border 0.2s, box-shadow 0.2s;
+      position: relative;
+      cursor: pointer;
+    }
+    .selected-node.nodeExample1 {
+      border: 2.5px solid #1976d2;
+      box-shadow: 0 4px 16px rgba(25, 118, 210, 0.08);
+      background: #e3f2fd;
+    }
+    .button.tiny { font-size: 12px; margin-top: 8px; }
+    .url-preview {
+      margin: 0.5em 0 0.5em 0;
+      font-size: 0.95em;
+      color: #1976d2;
+      word-break: break-all;
+    }
+    .confirm-url-btn {
+      margin-top: 0.5em;
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 0.3em 1em;
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+    .confirm-url-btn:disabled {
+      background: #bdbdbd;
+      cursor: not-allowed;
+    }
+  </style>
+<% end %>
+
+<div class="row">
+  <div class="small-12 column">
+    <h1><%= @decision_tree.title %></h1>
+    <p><%= @decision_tree.description %></p>
+
+    <div id="tree-simple" style="width:100%; min-height:600px;"></div>
+  </div>
+</div>
+
+<!-- Modal for adding child node -->
+<div id="addChildModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" id="closeAddChildModal">&times;</span>
+    <h4>Add Child Node</h4>
+    <%= form_with url: decision_tree_decision_nodes_path(@decision_tree), method: :post, local: true, id: 'addNodeForm' do |f| %>
+      <%= hidden_field_tag :parent_id, nil, id: 'modal_parent_id' %>
+      <div>
+        <%= f.label :content, "Node Content" %><br>
+        <%= f.text_field :content, required: false, name: 'decision_node[content]', id: 'node_content_field' %>
+      </div>
+      <div style="margin-top: 0.5em;">
+        <%= f.label :url, "URL (optional)" %><br>
+        <%= f.text_field :url, required: false, name: 'decision_node[url]', id: 'node_url_field' %>
+        <div id="urlPreview" class="url-preview" style="display:none;"></div>
+        <button type="button" id="confirmUrlBtn" class="confirm-url-btn" style="display:none;">Confirm URL</button>
+        <%= hidden_field_tag 'decision_node[url_confirmed]', false, id: 'url_confirmed_field' %>
+      </div>
+      <div style="margin-top: 1em;">
+        <%= f.submit "Add Node", class: "button", id: 'addNodeSubmit', disabled: true %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= content_for :scripts do %>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.min.js"></script>
+  <script>
+    // Helper to add the speech bubble icon to each node
+    function addIconToNode(node, nodeId) {
+      var icon = document.createElement('img');
+      icon.src = '/speech_bubble.jpg';
+      icon.alt = 'Add Child Node';
+      icon.className = 'speech-bubble-icon';
+      icon.title = 'Add Child Node';
+      icon.onclick = function(e) {
+        e.stopPropagation();
+        document.getElementById('addChildModal').style.display = 'block';
+        document.getElementById('modal_parent_id').value = nodeId;
+        // Reset form fields
+        document.getElementById('node_content_field').value = '';
+        document.getElementById('node_url_field').value = '';
+        document.getElementById('urlPreview').style.display = 'none';
+        document.getElementById('confirmUrlBtn').style.display = 'none';
+        document.getElementById('url_confirmed_field').value = false;
+        document.getElementById('addNodeSubmit').disabled = true;
+      };
+      node.appendChild(icon);
+    }
+
+    // Recursively add HTML for each node
+    function buildNodeStructure(node) {
+      var nodeObj = {
+        innerHTML: '<div>' + node.text.name + '</div>',
+        HTMLid: 'node-' + node.id
+      };
+      if (node.children && node.children.length > 0) {
+        nodeObj.children = node.children.map(buildNodeStructure);
+      }
+      return nodeObj;
+    }
+
+    // Build the node structure from Rails JSON
+    var railsTree = <%= raw @tree_json.to_json %>;
+    function addNodeIds(node, id) {
+      node.id = id;
+      if (node.children) {
+        for (var i = 0; i < node.children.length; i++) {
+          addNodeIds(node.children[i], window.nodeIds.shift());
+        }
+      }
+    }
+    // Collect all node IDs from the DB for mapping
+    window.nodeIds = <%= @decision_tree.decision_nodes.order(:id).pluck(:id).to_json %>;
+    addNodeIds(railsTree, window.nodeIds.shift());
+
+    var treantConfig = {
+      chart: {
+        container: "#tree-simple",
+        node: { HTMLclass: 'nodeExample1' },
+        connectors: { type: 'step' },
+        animation: { nodeAnimation: "easeOutBounce", nodeSpeed: 700, connectorsAnimation: "bounce", connectorSpeed: 700 }
+      },
+      nodeStructure: buildNodeStructure(railsTree)
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      new Treant(treantConfig, function() {
+        // Add the speech bubble icon to each node after rendering
+        window.nodeIds = <%= @decision_tree.decision_nodes.order(:id).pluck(:id).to_json %>;
+        window.nodeIds.forEach(function(id) {
+          var nodeDiv = document.getElementById('node-' + id);
+          if (nodeDiv) {
+            addIconToNode(nodeDiv, id);
+            // Add click handler for selection
+            nodeDiv.onclick = function(e) {
+              e.stopPropagation();
+              // Deselect all nodes
+              document.querySelectorAll('.nodeExample1.selected-node').forEach(function(n) {
+                n.classList.remove('selected-node');
+              });
+              // Select this node
+              nodeDiv.classList.add('selected-node');
+            };
+          }
+        });
+        // Deselect nodes when clicking outside
+        document.body.addEventListener('click', function(e) {
+          if (!e.target.classList.contains('nodeExample1')) {
+            document.querySelectorAll('.nodeExample1.selected-node').forEach(function(n) {
+              n.classList.remove('selected-node');
+            });
+          }
+        });
+      });
+
+      // Modal logic
+      var modal = document.getElementById('addChildModal');
+      var closeBtn = document.getElementById('closeAddChildModal');
+      closeBtn.onclick = function() { modal.style.display = 'none'; };
+      window.onclick = function(event) {
+        if (event.target == modal) { modal.style.display = 'none'; }
+      };
+
+      // URL validation and confirmation logic
+      var urlField = document.getElementById('node_url_field');
+      var confirmBtn = document.getElementById('confirmUrlBtn');
+      var urlPreview = document.getElementById('urlPreview');
+      var addNodeSubmit = document.getElementById('addNodeSubmit');
+      var urlConfirmedField = document.getElementById('url_confirmed_field');
+      var urlValid = false;
+      var urlConfirmed = false;
+
+      function validateUrl(url) {
+        try {
+          var u = new URL(url);
+          return u.protocol === 'http:' || u.protocol === 'https:';
+        } catch (e) {
+          return false;
+        }
+      }
+
+      urlField.addEventListener('input', function() {
+        var url = urlField.value.trim();
+        urlValid = validateUrl(url);
+        urlConfirmed = false;
+        urlConfirmedField.value = false;
+        addNodeSubmit.disabled = true;
+        if (urlValid) {
+          urlPreview.textContent = url;
+          urlPreview.style.display = 'block';
+          confirmBtn.style.display = 'inline-block';
+        } else {
+          urlPreview.style.display = 'none';
+          confirmBtn.style.display = 'none';
+        }
+      });
+
+      confirmBtn.addEventListener('click', function() {
+        urlConfirmed = true;
+        urlConfirmedField.value = true;
+        confirmBtn.textContent = 'URL Confirmed';
+        confirmBtn.disabled = true;
+        addNodeSubmit.disabled = false;
+      });
+
+      // Enable Add Node if content is present and no URL, or if URL is confirmed
+      document.getElementById('node_content_field').addEventListener('input', function() {
+        var content = this.value.trim();
+        var url = urlField.value.trim();
+        if ((content && !url) || (url && urlConfirmed)) {
+          addNodeSubmit.disabled = false;
+        } else {
+          addNodeSubmit.disabled = true;
+        }
+      });
+    });
+  </script>
+<% end %> 

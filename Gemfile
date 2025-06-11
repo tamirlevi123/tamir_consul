@@ -93,6 +93,8 @@ group :development do
   gem 'capistrano3-delayed-job', '~> 1.7.6'
   gem 'capistrano3-puma', '~> 6.0.0'
   gem 'capistrano-npm', require: false
+  gem 'ed25519', '~> 1.2.4'
+  gem 'bcrypt_pbkdf', '~> 1.1.0'
   gem "erb_lint", "~> 0.9.0", require: false
   gem "faraday-retry", "~> 2.3.1", require: false
   gem "htmlbeautifier", "~> 1.4.3", require: false

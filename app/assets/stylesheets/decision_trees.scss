@@ -1,0 +1,26 @@
+.decision-tree {
+  margin: 2rem 0;
+}
+
+.decision-node {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.node-content {
+  margin-bottom: 1rem;
+}
+
+.node-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.child-nodes {
+  margin-left: 2rem;
+  padding-left: 1rem;
+  border-left: 2px solid #eee;
+} 

@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="small-12 column">
+    <h1>Decision Trees</h1>
+    
+    <div class="row">
+      <div class="small-12 medium-6 column">
+        <%= link_to "Create New Decision Tree", new_decision_tree_path, class: "button" %>
+      </div>
+    </div>
+
+    <div class="row">
+      <% @decision_trees.each do |tree| %>
+        <div class="small-12 medium-6 large-4 column">
+          <div class="card">
+            <div class="card-section">
+              <h3><%= link_to tree.title, decision_tree_path(tree) %></h3>
+              <p><%= tree.description %></p>
+              <p class="text-muted">Created by: <%= tree.user.name %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div> 

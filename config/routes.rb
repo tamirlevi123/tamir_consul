@@ -35,6 +35,12 @@ Rails.application.routes.draw do
     draw :valuation
     draw :verification
 
+    # Decision Trees
+    resources :decision_trees do
+      resources :node_votes, only: [:create]
+      resources :decision_nodes, only: [:create]
+    end
+
     root "welcome#index"
     get "/welcome", to: "welcome#welcome"
     get "/consul.json", to: "installation#details"
