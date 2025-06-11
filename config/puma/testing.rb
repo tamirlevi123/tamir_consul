@@ -22,7 +22,6 @@ stdout_redirect "#{rails_root}/log/puma_access.log", "#{rails_root}/log/puma_err
 
 #bind "unix://#{rails_root}/tmp/sockets/puma.sock"
 bind "tcp://0.0.0.0:3005"
-daemonize
 
 threads 0, 16
 workers 2
