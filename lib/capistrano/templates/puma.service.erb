@@ -24,6 +24,7 @@ Environment=GEM_HOME=/home/azureuser/apps/consul231/shared/bundle
 Environment=BUNDLE_PATH=/home/azureuser/apps/consul231/shared/bundle
 Environment=RAILS_ENV=testing
 Environment=RACK_ENV=testing
+Environment=BUNDLE_GEMFILE=/home/azureuser/apps/consul231/current/Gemfile
 
 ExecStart=/home/azureuser/.rvm/gems/ruby-3.3.8/bin/bundle exec puma -C config/puma/testing.rb
 ExecReload=/bin/kill -USR1 $MAINPID
