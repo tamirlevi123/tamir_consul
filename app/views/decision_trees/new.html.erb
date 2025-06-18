@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="small-12 column">
+    <h1><%= t("decision_trees.new.title") %></h1>
+
+    <%= form_with(model: @decision_tree, local: true) do |f| %>
+      <% if @decision_tree.errors.any? %>
+        <div class="callout alert">
+          <h2><%= pluralize(@decision_tree.errors.count, "error") %> prohibited this decision tree from being saved:</h2>
+          <ul>
+            <% @decision_tree.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="field">
+        <%= f.label :title %>
+        <%= f.text_field :title %>
+      </div>
+
+      <div class="field">
+        <%= f.label :description %>
+        <%= f.text_area :description, rows: 5 %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit class: "button" %>
+        <%= link_to t("shared.back"), decision_trees_path, class: "button hollow" %>
+      </div>
+    <% end %>
+  </div>
+</div> 

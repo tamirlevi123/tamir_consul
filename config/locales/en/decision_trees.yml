@@ -1,0 +1,10 @@
+en:
+  decision_trees:
+    new:
+      title: "Create New Decision Tree"
+    form:
+      title: "Title"
+      description: "Description"
+      submit: "Save"
+    shared:
+      back: "Back" 

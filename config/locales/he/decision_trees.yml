@@ -1,0 +1,10 @@
+he:
+  decision_trees:
+    new:
+      title: "יצירת עץ החלטות חדש"
+    form:
+      title: "כותרת"
+      description: "תיאור"
+      submit: "שמור"
+    shared:
+      back: "חזרה" 
