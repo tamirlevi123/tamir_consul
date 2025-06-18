@@ -23,4 +23,19 @@
   margin-left: 2rem;
   padding-left: 1rem;
   border-left: 2px solid #eee;
+}
+
+#tree-simple {
+  width: 100vw !important;
+  min-width: 1200px;
+  min-height: 600px;
+  overflow-x: auto;
+  overflow-y: visible;
+  margin: 0 auto;
+  background: #fff;
+}
+.Treant {
+  min-width: 1200px;
+  overflow-x: auto;
+  overflow-y: visible;
 } 

@@ -124,6 +124,7 @@
 //= require_tree ./sdg_management
 //= require_tree ./custom
 //= require custom
+//= require decision_tree
 
 var initialize_modules = function() {
   "use strict";

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_13_014205) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_11_163025) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -546,6 +546,30 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_13_014205) do
     t.index ["tsv"], name: "index_debates_on_tsv", using: :gin
   end
 
+  create_table "decision_nodes", force: :cascade do |t|
+    t.text "content"
+    t.integer "position"
+    t.bigint "decision_tree_id"
+    t.bigint "user_id"
+    t.bigint "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "url"
+    t.boolean "url_confirmed", default: false, null: false
+    t.index ["decision_tree_id"], name: "index_decision_nodes_on_decision_tree_id"
+    t.index ["parent_id"], name: "index_decision_nodes_on_parent_id"
+    t.index ["user_id"], name: "index_decision_nodes_on_user_id"
+  end
+
+  create_table "decision_trees", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_decision_trees_on_user_id"
+  end
+
   create_table "delayed_jobs", id: :serial, force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
@@ -987,6 +1011,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_13_014205) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "hidden_at", precision: nil
+  end
+
+  create_table "node_votes", force: :cascade do |t|
+    t.string "vote_type"
+    t.bigint "decision_node_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["decision_node_id"], name: "index_node_votes_on_decision_node_id"
+    t.index ["user_id"], name: "index_node_votes_on_user_id"
   end
 
   create_table "notifications", id: :serial, force: :cascade do |t|
@@ -1778,6 +1812,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_13_014205) do
   add_foreign_key "dashboard_executed_actions", "dashboard_actions", column: "action_id"
   add_foreign_key "dashboard_executed_actions", "proposals"
   add_foreign_key "dashboard_executed_actions", "proposals"
+  add_foreign_key "decision_nodes", "decision_nodes", column: "parent_id"
+  add_foreign_key "decision_nodes", "decision_trees"
+  add_foreign_key "decision_nodes", "users"
+  add_foreign_key "decision_trees", "users"
   add_foreign_key "documents", "users"
   add_foreign_key "failed_census_calls", "poll_officers"
   add_foreign_key "failed_census_calls", "users"
@@ -1794,6 +1832,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_13_014205) do
   add_foreign_key "machine_learning_jobs", "users"
   add_foreign_key "managers", "users"
   add_foreign_key "moderators", "users"
+  add_foreign_key "node_votes", "decision_nodes"
+  add_foreign_key "node_votes", "users"
   add_foreign_key "notifications", "users"
   add_foreign_key "organizations", "users"
   add_foreign_key "poll_answers", "poll_question_answers", column: "option_id"

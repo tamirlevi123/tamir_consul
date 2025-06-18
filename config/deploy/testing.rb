@@ -43,7 +43,7 @@ set :linked_files, fetch(:linked_files, []) + ['.env']
 
 # RVM Configuration
 set :rvm_type, :user
-set :rvm_ruby_version, '3.0.6'
+set :rvm_ruby_version, '3.3.8'
 set :rvm_custom_path, '/home/azureuser/.rvm'
 
 # SSH configuration

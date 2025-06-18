@@ -1,12 +1,14 @@
-<div class="row">
+clear<div class="row">
   <div class="small-12 column">
     <h1>Decision Trees</h1>
     
+    <% if user_signed_in? %>
     <div class="row">
       <div class="small-12 medium-6 column">
         <%= link_to "Create New Decision Tree", new_decision_tree_path, class: "button" %>
       </div>
     </div>
+    <% end %>
 
     <div class="row">
       <% @decision_trees.each do |tree| %>

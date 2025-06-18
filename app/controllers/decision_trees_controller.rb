@@ -1,7 +1,7 @@
 class DecisionTreesController < ApplicationController
   skip_authorization_check
-  before_action :authenticate_user!
   before_action :set_decision_tree, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
   def index
     @decision_trees = DecisionTree.all
@@ -9,7 +9,7 @@ class DecisionTreesController < ApplicationController
 
   def show
     @root_nodes = @decision_tree.decision_nodes.where(parent_id: nil)
-    @tree_json = build_tree_json(@root_nodes.first) # assuming one root node for now
+    @tree_json = build_tree_json(@root_nodes.first) if @root_nodes.any? # only build if we have root nodes
   end
 
   def new
