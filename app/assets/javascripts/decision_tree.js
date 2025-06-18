@@ -1,5 +1,5 @@
 function initializeDecisionTree(railsTree, nodeIds, userSignedIn) {
-  console.log('initializeDecisionTree called');
+  console.log('initializeDecisionTree called with:', { railsTree, nodeIds, userSignedIn });
   
   // Wait for Treant to be available
   if (typeof Treant === 'undefined') {
@@ -9,26 +9,25 @@ function initializeDecisionTree(railsTree, nodeIds, userSignedIn) {
     }, 100);
     return;
   }
+  console.log('Treant is loaded and available');
 
   // Recursively add HTML for each node
   function buildNodeStructure(node) {
+    console.log('Building node structure for:', node);
     var nodeObj = {
-      innerHTML: '<div>' + node.text.name + '</div>',
-      HTMLid: 'node-' + node.id
+      text: { name: node.text.name },
+      HTMLid: 'node-' + node.id,
+      connectors: {
+        style: {
+          'stroke': '#1976d2',
+          'arrow-end': 'oval-wide-long'
+        }
+      }
     };
     if (node.children && node.children.length > 0) {
       nodeObj.children = node.children.map(buildNodeStructure);
     }
     return nodeObj;
-  }
-
-  function addNodeIds(node, id) {
-    node.id = id;
-    if (node.children) {
-      for (var i = 0; i < node.children.length; i++) {
-        addNodeIds(node.children[i], nodeIds.shift());
-      }
-    }
   }
 
   if (!railsTree) {
@@ -42,58 +41,88 @@ function initializeDecisionTree(railsTree, nodeIds, userSignedIn) {
     container.innerHTML = '';
   }
 
-  addNodeIds(railsTree, nodeIds.shift());
+  console.log('Tree structure before rendering:', railsTree);
 
   var treantConfig = {
     chart: {
       container: "#tree-simple",
-      node: { HTMLclass: 'nodeExample1' },
-      connectors: { type: 'step' },
-      animation: { nodeAnimation: "easeOutBounce", nodeSpeed: 700, connectorsAnimation: "bounce", connectorSpeed: 700 }
+      node: { 
+        HTMLclass: 'nodeExample1',
+        collapsable: true
+      },
+      connectors: { 
+        type: 'step',
+        style: {
+          'stroke-width': 2
+        }
+      },
+      animation: { 
+        nodeAnimation: "easeOutBounce",
+        nodeSpeed: 700,
+        connectorsAnimation: "bounce",
+        connectorSpeed: 700
+      }
     },
     nodeStructure: buildNodeStructure(railsTree)
   };
 
+  console.log('Creating Treant with config:', treantConfig);
   new Treant(treantConfig, function() {
-    nodeIds.forEach(function(id) {
-      var nodeDiv = document.getElementById('node-' + id);
-      if (nodeDiv) {
-        if (userSignedIn) {
+    if (userSignedIn) {
+      nodeIds.forEach(function(id) {
+        var nodeDiv = document.getElementById('node-' + id);
+        if (nodeDiv) {
+          console.log('Setting up node:', id);
           // Add speech bubble icon for logged-in users
-          var icon = document.createElement('img');
-          icon.src = '/speech_bubble.jpg';
-          icon.alt = 'Add Child Node';
+          var icon = document.createElement('div');
+          icon.innerHTML = `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 2C8.26801 2 2 7.26801 2 14C2 17.326 3.38376 20.3341 5.65454 22.5013C5.77231 22.6135 5.84201 22.7678 5.84201 22.9293V29.2858C5.84201 29.7209 6.32327 29.9848 6.69379 29.7608L12.2225 26.5159C12.3857 26.4205 12.5752 26.3901 12.7584 26.4301C13.7843 26.6754 14.8696 26.8071 16 26.8071C23.732 26.8071 30 21.5391 30 14.8071C30 7.26801 23.732 2 16 2Z" fill="#1976d2"/>
+          </svg>`;
           icon.className = 'speech-bubble-icon';
           icon.title = 'Add Child Node';
+          console.log('Creating icon for node:', id);
+          nodeDiv.appendChild(icon);
+          console.log('Icon added to node');
+          
           icon.onclick = function(e) {
             e.stopPropagation();
-            document.getElementById('addChildModal').style.display = 'block';
-            document.getElementById('modal_parent_id').value = id;
-            // Reset form fields
-            document.getElementById('node_content_field').value = '';
-            document.getElementById('node_url_field').value = '';
-            document.getElementById('urlPreview').style.display = 'none';
-            document.getElementById('confirmUrlBtn').style.display = 'none';
-            document.getElementById('url_confirmed_field').value = false;
-            document.getElementById('addNodeSubmit').disabled = true;
+            console.log('Setting up node:', id);
+            var $modal = $('#addNodeModal');
+            if ($modal.length) {
+              $('#node_parent_id').val(id);
+              // Reset form fields
+              $('#node_content').val('');
+              $('#node_url').val('');
+              $('#urlPreview').hide();
+              $('#confirmUrlBtn').hide();
+              $('#url_confirmed').val(false);
+              $('#addNodeSubmit').prop('disabled', true);
+              
+              $modal.foundation('open');
+            } else {
+              console.error('Modal not found');
+            }
           };
-          nodeDiv.appendChild(icon);
+
+          // Add click handler for selection
+          nodeDiv.onclick = function(e) {
+            e.stopPropagation();
+            console.log('Node clicked:', id);
+            // Deselect all nodes
+            document.querySelectorAll('.nodeExample1.selected-node').forEach(function(n) {
+              n.classList.remove('selected-node');
+            });
+            // Select this node
+            nodeDiv.classList.add('selected-node');
+            console.log('Node selected, classes:', nodeDiv.className);
+          };
         }
-        // Add click handler for selection (for all users)
-        nodeDiv.onclick = function(e) {
-          e.stopPropagation();
-          // Deselect all nodes
-          document.querySelectorAll('.nodeExample1.selected-node').forEach(function(n) {
-            n.classList.remove('selected-node');
-          });
-          // Select this node
-          nodeDiv.classList.add('selected-node');
-        };
-      }
-    });
-    // Deselect nodes when clicking outside (for all users)
+      });
+    }
+
+    // Deselect nodes when clicking outside
     document.body.addEventListener('click', function(e) {
-      if (!e.target.classList.contains('nodeExample1')) {
+      if (!e.target.closest('.nodeExample1')) {
         document.querySelectorAll('.nodeExample1.selected-node').forEach(function(n) {
           n.classList.remove('selected-node');
         });
@@ -102,20 +131,12 @@ function initializeDecisionTree(railsTree, nodeIds, userSignedIn) {
   });
 
   if (userSignedIn) {
-    // Modal logic for logged-in users
-    var modal = document.getElementById('addChildModal');
-    var closeBtn = document.getElementById('closeAddChildModal');
-    closeBtn.onclick = function() { modal.style.display = 'none'; };
-    window.onclick = function(event) {
-      if (event.target == modal) { modal.style.display = 'none'; }
-    };
-
     // URL validation and confirmation logic
-    var urlField = document.getElementById('node_url_field');
-    var confirmBtn = document.getElementById('confirmUrlBtn');
-    var urlPreview = document.getElementById('urlPreview');
-    var addNodeSubmit = document.getElementById('addNodeSubmit');
-    var urlConfirmedField = document.getElementById('url_confirmed_field');
+    var urlField = $('#node_url');
+    var confirmBtn = $('#confirmUrlBtn');
+    var urlPreview = $('#urlPreview');
+    var addNodeSubmit = $('#addNodeSubmit');
+    var urlConfirmedField = $('#url_confirmed');
     var urlValid = false;
     var urlConfirmed = false;
 
@@ -128,42 +149,42 @@ function initializeDecisionTree(railsTree, nodeIds, userSignedIn) {
       }
     }
 
-    urlField.addEventListener('input', function() {
-      var url = urlField.value.trim();
+    urlField.on('input', function() {
+      var url = urlField.val().trim();
       urlValid = validateUrl(url);
       urlConfirmed = false;
-      urlConfirmedField.value = false;
-      addNodeSubmit.disabled = true;
+      urlConfirmedField.val(false);
+      addNodeSubmit.prop('disabled', true);
       if (urlValid) {
-        urlPreview.textContent = url;
-        urlPreview.style.display = 'block';
-        confirmBtn.style.display = 'inline-block';
+        urlPreview.text(url);
+        urlPreview.show();
+        confirmBtn.show();
       } else {
-        urlPreview.style.display = 'none';
-        confirmBtn.style.display = 'none';
+        urlPreview.hide();
+        confirmBtn.hide();
       }
     });
     console.log('Added event listener for urlField input');
 
-    confirmBtn.addEventListener('click', function() {
+    confirmBtn.on('click', function() {
       urlConfirmed = true;
-      urlConfirmedField.value = true;
-      confirmBtn.textContent = 'URL Confirmed';
-      confirmBtn.disabled = true;
-      addNodeSubmit.disabled = false;
+      urlConfirmedField.val(true);
+      confirmBtn.text('URL Confirmed');
+      confirmBtn.prop('disabled', true);
+      addNodeSubmit.prop('disabled', false);
     });
     console.log('Added event listener for confirmBtn click');
 
-    document.getElementById('node_content_field').addEventListener('input', function() {
-      var content = this.value.trim();
-      var url = urlField.value.trim();
+    $('#node_content').on('input', function() {
+      var content = $(this).val().trim();
+      var url = urlField.val().trim();
       if ((content && !url) || (url && urlConfirmed)) {
-        addNodeSubmit.disabled = false;
+        addNodeSubmit.prop('disabled', false);
       } else {
-        addNodeSubmit.disabled = true;
+        addNodeSubmit.prop('disabled', true);
       }
     });
-    console.log('Added event listener for node_content_field input');
+    console.log('Added event listener for node_content input');
   }
 }
 

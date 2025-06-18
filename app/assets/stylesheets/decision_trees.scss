@@ -26,16 +26,93 @@
 }
 
 #tree-simple {
-  width: 100vw !important;
-  min-width: 1200px;
-  min-height: 600px;
-  overflow-x: auto;
-  overflow-y: visible;
-  margin: 0 auto;
-  background: #fff;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 40px;
+  min-height: 500px;
 }
+
 .Treant {
-  min-width: 1200px;
-  overflow-x: auto;
-  overflow-y: visible;
+  position: relative;
+  overflow: hidden;
+  padding: 0 !important;
+}
+
+.Treant > .node {
+  position: absolute;
+  display: block;
+  visibility: hidden;
+}
+
+.Treant > .node.selected-node {
+  border: 2px solid #1976d2;
+  box-shadow: 0 0 5px rgba(25, 118, 210, 0.5);
+}
+
+.Treant > .node img {
+  width: 100%;
+  height: 100%;
+}
+
+.Treant .collapse-switch {
+  width: 100%;
+  height: 100%;
+  border: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+
+.Treant .node {
+  cursor: pointer;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  min-width: 150px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  .node-content {
+    font-size: 14px;
+    color: #333;
+    word-break: break-word;
+  }
+}
+
+.speech-bubble-icon {
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+
+  &:hover {
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+.node:hover .speech-bubble-icon {
+  opacity: 1;
+}
+
+.Treant .collapsed .collapse-switch {
+  background-position: -36px -7px;
+}
+
+.Treant > p {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: bold;
+  font-size: 12px;
 } 

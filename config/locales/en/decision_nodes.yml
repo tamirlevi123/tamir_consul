@@ -1,0 +1,24 @@
+en:
+  decision_nodes:
+    new:
+      title: "Add New Decision Node"
+    form:
+      url_help: "Optional URL for additional information"
+    add_node_modal:
+      title: "Add New Node"
+      content_label: "Content"
+      content_placeholder: "Enter the node content..."
+      url_label: "External URL (Optional)"
+      url_placeholder: "https://..."
+      url_help: "Add a URL to link to external content"
+      confirm_url: "Confirm URL"
+      submit: "Add Node"
+    create:
+      success: "Node was successfully created"
+      error: "Error creating node"
+    update:
+      success: "Node was successfully updated"
+      error: "Error updating node"
+    destroy:
+      success: "Node was successfully deleted"
+      error: "Error deleting node" 

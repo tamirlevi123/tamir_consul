@@ -8,8 +8,16 @@ class DecisionTreesController < ApplicationController
   end
 
   def show
-    @root_nodes = @decision_tree.decision_nodes.where(parent_id: nil)
-    @tree_json = build_tree_json(@root_nodes.first) if @root_nodes.any? # only build if we have root nodes
+    @decision_tree = DecisionTree.find(params[:id])
+    @root_node = @decision_tree.root_node
+    
+    if @root_node
+      @tree_data = build_tree_data(@root_node)
+      @node_ids = collect_node_ids(@root_node)
+    else
+      @tree_data = nil
+      @node_ids = []
+    end
   end
 
   def new
@@ -35,11 +43,17 @@ class DecisionTreesController < ApplicationController
     params.require(:decision_tree).permit(:title, :description)
   end
 
-  def build_tree_json(node)
-    return unless node
+  def build_tree_data(node)
     {
-      text: { name: node.content },
-      children: node.child_nodes.map { |child| build_tree_json(child) }
+      id: node.id,
+      text: {
+        name: node.content
+      },
+      children: node.child_nodes.map { |child| build_tree_data(child) }
     }
+  end
+
+  def collect_node_ids(node)
+    [node.id] + node.child_nodes.flat_map { |child| collect_node_ids(child) }
   end
 end 

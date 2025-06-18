@@ -38,7 +38,7 @@ Rails.application.routes.draw do
     # Decision Trees
     resources :decision_trees do
       resources :node_votes, only: [:create]
-      resources :decision_nodes, only: [:create]
+      resources :decision_nodes, only: [:new, :create]
     end
 
     root "welcome#index"

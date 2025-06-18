@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="small-12 column">
+    <h1><%= t("decision_nodes.new.title") %></h1>
+
+    <%= form_with(model: [@decision_tree, @decision_node], local: true) do |f| %>
+      <% if @decision_node.errors.any? %>
+        <div class="callout alert">
+          <h2><%= pluralize(@decision_node.errors.count, "error") %> prohibited this node from being saved:</h2>
+          <ul>
+            <% @decision_node.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="field">
+        <%= f.label :content %>
+        <%= f.text_area :content, rows: 3 %>
+      </div>
+
+      <div class="field">
+        <%= f.label :url %>
+        <%= f.text_field :url %>
+        <p class="help-text"><%= t("decision_nodes.form.url_help") %></p>
+      </div>
+
+      <%= hidden_field_tag :parent_id, params[:parent_id] %>
+
+      <div class="actions">
+        <%= f.submit class: "button" %>
+        <%= link_to t("shared.back"), decision_tree_path(@decision_tree), class: "button hollow" %>
+      </div>
+    <% end %>
+  </div>
+</div> 

@@ -1,0 +1,9 @@
+en:
+  shared:
+    close: "Close"
+    save: "Save"
+    cancel: "Cancel"
+    edit: "Edit"
+    delete: "Delete"
+    back: "Back"
+    or: "or" 

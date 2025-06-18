@@ -1,10 +1,22 @@
 en:
   decision_trees:
+    add_node_modal:
+      title: "Add New Node"
+      url_help: "Optional: Add a URL to link to external content"
+      submit: "Add Node"
+      confirm_url: "Confirm URL"
+    show:
+      title: "Decision Tree"
+      add_root: "Add Root Node"
+      add_child: "Add Child Node"
     new:
-      title: "Create New Decision Tree"
+      title: "New Decision Tree"
+      submit: "Create Decision Tree"
     form:
-      title: "Title"
-      description: "Description"
-      submit: "Save"
+      title_placeholder: "Enter the title for your decision tree"
+      description_placeholder: "Describe what this decision tree is about"
+    title: "Title"
+    description: "Description"
+    submit: "Save"
     shared:
       back: "Back" 
