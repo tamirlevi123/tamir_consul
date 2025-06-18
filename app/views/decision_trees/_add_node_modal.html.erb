@@ -1,0 +1,158 @@
+<!-- Modal for adding new nodes -->
+<div class="reveal" id="addNodeModal" data-reveal dir="rtl">
+  <h3 class="text-center"><%= t("decision_nodes.add_node_modal.title") %></h3>
+
+  <%= form_with(model: [@decision_tree, DecisionNode.new], 
+                local: true, 
+                class: "add-node-form") do |f| %>
+    <div class="row">
+      <div class="small-12 column">
+        <%= f.label :content, t("decision_nodes.add_node_modal.content_label") %>
+        <%= f.text_area :content, rows: 4, class: "small-12", id: "node_content", placeholder: t("decision_nodes.add_node_modal.content_placeholder"), dir: "rtl" %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-12 column">
+        <%= f.label :url, t("decision_nodes.add_node_modal.url_label") %>
+        <%= f.text_field :url, class: "small-12", id: "node_url", placeholder: t("decision_nodes.add_node_modal.url_placeholder"), dir: "ltr" %>
+        <small class="help-text"><%= t("decision_nodes.add_node_modal.url_help") %></small>
+        <div id="urlPreview" class="url-preview" style="display: none;"></div>
+        <button type="button" id="confirmUrlBtn" class="confirm-url-btn" style="display: none;">
+          <%= t(".confirm_url") %>
+        </button>
+      </div>
+    </div>
+
+    <%= f.hidden_field :parent_id, id: "node_parent_id" %>
+    <%= f.hidden_field :url_confirmed, id: "url_confirmed", value: "false" %>
+
+    <div class="row column text-left">
+      <%= f.submit t("decision_nodes.add_node_modal.submit"), class: "button", id: "addNodeSubmit" %>
+      <button class="button hollow" data-close aria-label="<%= t("shared.close") %>">
+        <%= t("shared.close") %>
+      </button>
+    </div>
+  <% end %>
+
+  <button class="close-button" data-close aria-label="<%= t("shared.close") %>" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<% content_for :styles do %>
+<style>
+  #addNodeModal {
+    border-radius: 8px;
+    padding: 2rem;
+    max-width: 500px;
+    margin: auto;
+  }
+  
+  #addNodeModal h3 {
+    margin-bottom: 1.5rem;
+    color: #1976d2;
+    font-size: 1.5rem;
+  }
+
+  #addNodeModal label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  #addNodeModal textarea,
+  #addNodeModal input[type="text"] {
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+  }
+
+  #addNodeModal textarea:focus,
+  #addNodeModal input[type="text"]:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+    outline: none;
+  }
+
+  #addNodeModal .help-text {
+    color: #666;
+    font-size: 0.875rem;
+    margin-top: -0.75rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  #addNodeModal .button {
+    border-radius: 4px;
+    margin: 0 0.25rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+  }
+
+  #addNodeModal .button.hollow {
+    border: 1px solid #1976d2;
+    color: #1976d2;
+  }
+
+  #addNodeModal .button.hollow:hover {
+    background: rgba(25, 118, 210, 0.1);
+  }
+
+  #addNodeModal .button[type="submit"] {
+    background: #1976d2;
+    color: white;
+  }
+
+  #addNodeModal .button[type="submit"]:hover {
+    background: #1565c0;
+  }
+
+  #addNodeModal .close-button {
+    color: #666;
+    font-size: 2rem;
+    top: 0.5rem;
+    left: 0.75rem;
+    right: auto;
+  }
+
+  [dir="rtl"] #addNodeModal input[type="text"],
+  [dir="rtl"] #addNodeModal textarea {
+    text-align: right;
+  }
+
+  [dir="rtl"] #addNodeModal input[dir="ltr"] {
+    text-align: left;
+  }
+
+  .url-preview {
+    margin: 0.75rem 0;
+    padding: 0.5rem;
+    background: #f5f5f5;
+    border-radius: 4px;
+    word-break: break-all;
+  }
+
+  .confirm-url-btn {
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+  }
+
+  .confirm-url-btn:hover {
+    background: #1565c0;
+  }
+
+  .confirm-url-btn:disabled {
+    background: #bdbdbd;
+    cursor: not-allowed;
+  }
+</style>
+<% end %> 

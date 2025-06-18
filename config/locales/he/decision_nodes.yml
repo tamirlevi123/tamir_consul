@@ -1,0 +1,20 @@
+he:
+  decision_nodes:
+    add_node_modal:
+      title: "הוספת צומת חדש"
+      content_label: "תוכן"
+      content_placeholder: "הכנס את תוכן הצומת..."
+      url_label: "קישור חיצוני (אופציונלי)"
+      url_placeholder: "https://..."
+      url_help: "הוסף קישור לתוכן חיצוני"
+      confirm_url: "אשר קישור"
+      submit: "הוסף צומת"
+    create:
+      success: "הצומת נוצר בהצלחה"
+      error: "שגיאה ביצירת הצומת"
+    update:
+      success: "הצומת עודכן בהצלחה"
+      error: "שגיאה בעדכון הצומת"
+    destroy:
+      success: "הצומת נמחק בהצלחה"
+      error: "שגיאה במחיקת הצומת" 
