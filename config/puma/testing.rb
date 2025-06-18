@@ -26,10 +26,6 @@ pidfile "#{rails_root}/tmp/pids/puma.pid"
 state_path "#{rails_root}/tmp/pids/puma.state"
 stdout_redirect "#{rails_root}/log/puma_access.log", "#{rails_root}/log/puma_error.log", true
 
-# Clean up any stale socket files before binding
-socket_file = "#{rails_root}/tmp/sockets/puma.sock"
-File.delete(socket_file) if File.exist?(socket_file)
-
 # Use TCP binding for testing environment
 bind "tcp://0.0.0.0:3005"
 
