@@ -69,10 +69,10 @@ module Consul
     config.time_zone = Rails.application.secrets.time_zone.presence || "Madrid"
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    config.i18n.load_path += Dir[Rails.root.join("config", "locales", "*", "*.{rb,yml}")]
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
     config.i18n.default_locale = :he
-    config.i18n.available_locales = [:he, :en, :es]
+    config.i18n.available_locales = [:he, :en, :ru, :ar]
+
     config.i18n.fallbacks = [:he, :en]
 
     initializer :exclude_custom_locales_automatic_loading, before: :add_locales do
@@ -128,6 +128,9 @@ module Consul
     def multitenancy_management_mode?
       config.multitenancy && Tenant.default? && config.multitenancy_management_mode
     end
+
+    # Don't generate system test files.
+    config.generators.system_tests = nil
   end
 end
 
