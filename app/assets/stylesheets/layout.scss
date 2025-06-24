@@ -1034,7 +1034,7 @@ form {
 }
 
 .notice-container {
-  min-width: $line-height * 12;
+  min-width: $line-height * 24;
   right: 24px;
   top: 24px;
 
@@ -1044,9 +1044,17 @@ form {
 
   .notice {
     height: $line-height * 4;
+    position: relative;
 
     .notice-text {
-      width: 95%;
+      padding-right: 2rem;
+    }
+
+    .close-button {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
     }
   }
 }
@@ -2363,3 +2371,19 @@ table {
     }
   }
 }
+
+// RTL-specific fix: Hide the ::before background by setting width to 0
+html[dir="rtl"] body .proposal-new header::before {
+  width: 0 !important;
+}
+
+// Add margin-right to the help link in proposal-new
+html[dir="rtl"] .proposal-new a[href='/help#proposals'] {
+  margin-right: 20%;
+}
+
+// RTL-specific: Remove float from legend in proposal-new
+html[dir="rtl"] .proposal-new legend {
+  float: none !important;
+}
+
