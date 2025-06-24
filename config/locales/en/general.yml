@@ -828,8 +828,8 @@ en:
     anonymous: Too many anonymous votes to admit vote %{verify_account}.
     disagree: I disagree
     disagree_label: "I don't agree with %{title}"
+    total_votes: "%{count} total votes"
     organizations: Organizations are not permitted to vote
-    supports: Supports
     verified_only: Only verified users can vote on proposals; %{verify_account}.
     budget_investments:
       not_verified: Only verified users can vote on investment projects; %{verify_account}.
@@ -953,3 +953,5 @@ en:
       title: Third party cookies
       description: This website use third-party cookies. These cookies can enhance functionality or collect information to improve your user experience.
     save_preferences: Save preferences
+  decision_trees:
+    login_to_edit: "Users must log in to edit Decision Trees"

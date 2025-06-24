@@ -21,4 +21,9 @@ en:
       error: "Error updating node"
     destroy:
       success: "Node was successfully deleted"
-      error: "Error deleting node" 
+      error: "Error deleting node"
+    votes:
+      total_votes: "%{count} total votes"
+      vote_recorded: "Vote recorded successfully"
+      vote_removed: "Vote removed successfully"
+      vote_error: "Unable to record vote" 

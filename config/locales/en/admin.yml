@@ -688,7 +688,7 @@ en:
           notice: Question deleted successfully
         edit:
           back: Back
-          title: "Edit “%{question_title}”"
+          title: "Edit %{question_title}"
           submit_button: Save changes
         form:
           add_option: Add option
@@ -758,6 +758,7 @@ en:
       valuators: Valuators
       poll_officers: Poll officers
       polls: Polls
+      decision_trees: Decision Trees
       poll_booths: Booths location
       poll_booth_assignments: Booths Assignments
       poll_shifts: Shifts Assignments
@@ -1675,7 +1676,7 @@ en:
         enable: "Enable tenant %{tenant}"
         enabled: Enabled
       new:
-        admin_information: "When you create a tenant, your current user <strong>\"%{username}\"</strong> with the email <strong>\"%{email}\"</strong> and your password will be copied into the new tenant's database and will be automatically granted administration permissions. Note that these user accounts are stored in completely separate databases, so if you change the password of your user in one tenant, your accounts in other tenants will remain intact."
+        admin_information: "When you create a tenant, your current user \"%{username}\" with the email \"%{email}\" and your password will be copied into the new tenant's database and will be automatically granted administration permissions. Note that these user accounts are stored in completely separate databases, so if you change the password of your user in one tenant, your accounts in other tenants will remain intact."
         title: New tenant
       restore:
         notice: Tenant enabled successfully
@@ -1823,3 +1824,35 @@ en:
             help_text: This information will be publicly visible.
           script:
             help_text: This is the script to run when this cookie is accepted by the user. You can enter vanilla Javascript code here and introduce references to other application javascript.
+
+    decision_trees:
+      index:
+        title: Decision Trees
+        id_header: "ID"
+        title_header: Title
+        description_header: Description
+        user_header: Created By
+        node_count_header: "Node Count"
+        created_at_header: Created At
+        actions_header: Actions
+        view: View
+        delete: Delete
+        delete_confirmation: Are you sure you want to delete this decision tree? This action cannot be undone.
+        no_trees: There are no decision trees.
+        unknown_user: Unknown User
+      show:
+        back_to_index: Back to Decision Trees
+        delete: Delete Decision Tree
+        delete_confirmation: Are you sure you want to delete this decision tree? This action cannot be undone.
+        description: Description
+        details: Details
+        created_by: Created By
+        created_at: Created At
+        updated_at: Updated At
+        total_nodes: Total Nodes
+        tree_structure: Tree Structure
+        no_tree_data: No tree data available.
+        unknown_user: Unknown User
+      destroy:
+        success_notice: Decision tree deleted successfully
+        error_notice: Error deleting decision tree
