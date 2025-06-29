@@ -139,7 +139,8 @@ function initializeDecisionTree(railsTree, nodeIds, userSignedIn) {
   nodeIds.forEach(function(nodeId) {
     const nodeElement = document.getElementById('node-' + nodeId);
     if (nodeElement) {
-      const voteData = findNodeById(railsTree, nodeId)?.vote_data;
+      const node = findNodeById(railsTree, nodeId);
+      const voteData = node && node.vote_data;
       if (voteData) {
         updateVoteDisplay(nodeId, voteData); 
         if (userSignedIn) {
