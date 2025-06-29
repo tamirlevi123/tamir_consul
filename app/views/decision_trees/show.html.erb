@@ -30,41 +30,112 @@
     }
     .speech-bubble-icon {
       display: none;
-      margin: 8px auto 0 auto;
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 32px;
       height: 32px;
-      transform: rotate(180deg);
-      cursor: pointer;
-      transition: filter 0.2s;
-      position: absolute;
-      bottom: -40px;
-      left: 50%;
-      margin-left: -16px;
       background: white;
       border-radius: 50%;
-      padding: 4px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      cursor: pointer;
+      z-index: 10;
+      align-items: center;
+      justify-content: center;
     }
     .selected-node .speech-bubble-icon {
-      display: block;
+      display: flex;
     }
     .speech-bubble-icon:hover {
-      filter: brightness(0.8);
+      transform: translateX(-50%) scale(1.1);
+      filter: brightness(0.95);
     }
     .nodeExample1 {
-      min-width: 120px;
-      min-height: 40px;
-      text-align: center;
-      border-radius: 18px;
-      background: #f8f9fa;
-      border: 2px solid #bdbdbd;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      padding: 10px 16px;
-      margin-bottom: 45px;
-      transition: border 0.2s, box-shadow 0.2s;
+      padding: 10px;
+      border-radius: 8px;
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
+      width: 300px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       position: relative;
       cursor: pointer;
+    }
+    .selected-node {
+      border: 2px solid #1976d2;
+      background-color: #e3f2fd;
+    }
+    .node-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .node-content {
+      padding: 10px;
+      font-size: 14px;
+      line-height: 1.4;
+      text-align: center;
+      word-wrap: break-word;
+    }
+    .node-voting-section {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #e0e0e0;
+    }
+    .decision-node-votes {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+    .in-favor,
+    .against {
+      text-align: center;
+    }
+    .vote-button {
+      background: #fff;
+      border: 2px solid #e9ecef;
+      border-radius: 3px;
+      padding: 4px 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    .vote-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .vote-button.like-button:hover {
+      border-color: #28a745;
+      color: #28a745;
+    }
+    .vote-button.like-button.voted {
+      background-color: #28a745;
+      border-color: #28a745;
+      color: #fff;
+    }
+    .vote-button.dislike-button:hover {
+      border-color: #dc3545;
+      color: #dc3545;
+    }
+    .vote-button.dislike-button.voted {
+      background-color: #dc3545;
+      border-color: #dc3545;
+      color: #fff;
+    }
+    .vote-count {
+      font-weight: bold;
+      margin-top: 2px;
+    }
+    .percentage {
+      font-size: 10px;
+      color: #666;
+    }
+    .total-votes {
+      text-align: center;
+      font-size: 10px;
+      color: #666;
+      margin-top: 4px;
     }
     .selected-node.nodeExample1 {
       border: 2.5px solid #1976d2;
@@ -95,32 +166,77 @@
     #tree-simple {
       width: 100%;
       height: 600px;
+      overflow: auto;
+    }
+    .decision-tree-container {
+      margin-top: 20px;
+    }
+    .Treant {
+      margin-top: 0px !important;
+    }
+    .small-12.column > p:first-child {
+      margin-bottom: 24px;
+    }
+    .Treant > .node {
+      cursor: pointer;
+    }
+    .Treant .collapse-switch {
+      width: 100%;
+      height: 100%;
+      border: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      cursor: pointer;
+    }
+    .Treant > .node {
+      position: absolute;
+      display: block;
+      visibility: visible;
+    }
+    .Treant .collapse-switch {
+      width: 100%;
+      height: 100%;
+      display: block;
+      position: absolute;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .node-content-wrapper {
+      position: relative;
+      width: 100%;
     }
   </style>
 <% end %>
 
 <div class="row">
   <div class="small-12 column">
-    <h1><%= @decision_tree.title %></h1>
-    <p><%= @decision_tree.description %></p>
+    <p style="margin-bottom: 24px;"><%= @decision_tree.description %></p>
 
     <div class="decision-tree-container">
-      <div id="tree-simple"></div>
-      <% if !@tree_data %>
-        <div class="callout warning">
-          <p>This decision tree has no nodes yet. Please refresh the page to see the root node.</p>
+      <% if @tree_data %>
+        <div id="tree-simple" 
+             class="Treant"
+             data-tree="<%= @tree_data.to_json %>" 
+             data-node-ids="<%= @node_ids.to_json %>"
+             data-user-signed-in="<%= user_signed_in? %>"
+             data-login-to-edit-message="<%= t(".login_to_edit") %>">
+        </div>
+      <% else %>
+        <div class="callout alert">
+          <p><%= t("decision_trees.show.no_tree_data") %></p>
         </div>
       <% end %>
     </div>
 
-    <% if Rails.env.development? && @tree_data %>
-      <div class="callout secondary" style="margin-bottom: 20px;">
+    <%# if Rails.env.development? && @tree_data %>
+      <!-- <div class="callout secondary" style="margin-bottom: 20px;">
         <h5>Debug Info:</h5>
-        <pre><%= JSON.pretty_generate(@tree_data) %></pre>
+        <pre><%#= JSON.pretty_generate(@tree_data) %></pre>
         <h5>Node IDs:</h5>
-        <pre><%= JSON.pretty_generate(@node_ids) %></pre>
-      </div>
-    <% end %>
+        <pre><%#= JSON.pretty_generate(@node_ids) %></pre>
+      </div> -->
+    <%# end %>
   </div>
 </div>
 
@@ -132,6 +248,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.min.js"></script>
   <script>
+    // Pass Rails data to the JavaScript 'window' object
     window.decisionTreeData = {
       railsTree: <%= raw(@tree_data.to_json) %>,
       nodeIds: <%= raw(@node_ids.to_json) %>,

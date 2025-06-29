@@ -36,9 +36,10 @@ Rails.application.routes.draw do
     draw :verification
 
     # Decision Trees
-    resources :decision_trees do
-      resources :node_votes, only: [:create]
-      resources :decision_nodes, only: [:new, :create]
+    resources :decision_trees, only: [:index, :show, :new, :create, :destroy] do
+      resources :decision_nodes, only: [:new, :create] do
+        resource :node_vote, only: [:create, :destroy]
+      end
     end
 
     root "welcome#index"

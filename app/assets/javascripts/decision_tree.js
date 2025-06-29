@@ -1,204 +1,361 @@
-function initializeDecisionTree(railsTree, nodeIds, userSignedIn) {
-  console.log('initializeDecisionTree called with:', { railsTree, nodeIds, userSignedIn });
+document.addEventListener("turbolinks:load", function() {
+  console.log("turbolinks:load event fired. Initializing tree.");
   
-  // Wait for Treant to be available
+  const treeContainer = document.getElementById('tree-simple');
+  if (treeContainer && window.decisionTreeData) {
+    // Clear any previous tree to prevent duplicates on reloads
+    treeContainer.innerHTML = '';
+    initializeDecisionTree(
+      window.decisionTreeData.railsTree,
+      window.decisionTreeData.nodeIds,
+      window.decisionTreeData.userSignedIn
+    );
+  } else {
+    console.log("Could not initialize tree. Missing container or data.");
+  }
+});
+
+function initializeDecisionTree(railsTree, nodeIds, userSignedIn) {
+  console.log('--- initializeDecisionTree STARTS ---');
+  
+  if (typeof $ !== 'undefined' && typeof $.fn.foundation !== 'undefined' && !$('body').attr('data-zf-loaded')) {
+    $(document).foundation();
+  }
+  
   if (typeof Treant === 'undefined') {
-    console.log('Treant not loaded yet, waiting...');
-    setTimeout(function() {
-      initializeDecisionTree(railsTree, nodeIds, userSignedIn);
-    }, 100);
+    console.log('Treant library not found. Aborting.');
     return;
   }
-  console.log('Treant is loaded and available');
+  
+  if (!railsTree) {
+    console.log('No tree data found. Aborting.');
+    return;
+  }
 
-  // Recursively add HTML for each node
   function buildNodeStructure(node) {
-    console.log('Building node structure for:', node);
+    console.log(`Building node structure for: node #${node.id}`);
+    
+    var addNodeIcon = '';
+    var voteData = node.vote_data || { likes: 0, dislikes: 0, total: 0, likes_percentage: '0%', dislikes_percentage: '0%' };
+
+    var votingHtml = `
+      <div class="node-voting-section">
+        <div class="decision-node-votes">
+          <div class="in-favor">
+            <button class="vote-button like-button" data-node-id="${node.id}" data-vote-type="like" data-tree-id="${railsTree.tree_id || 1}" ${!userSignedIn ? 'disabled' : ''}>
+              <i class="fas fa-thumbs-up"></i>
+            </button>
+            <div class="vote-count">${voteData.likes}</div>
+            <div class="percentage">${voteData.likes_percentage}</div>
+          </div>
+          <div class="against">
+            <button class="vote-button dislike-button" data-node-id="${node.id}" data-vote-type="dislike" data-tree-id="${railsTree.tree_id || 1}" ${!userSignedIn ? 'disabled' : ''}>
+              <i class="fas fa-thumbs-down"></i>
+            </button>
+            <div class="vote-count">${voteData.dislikes}</div>
+            <div class="percentage">${voteData.dislikes_percentage}</div>
+          </div>
+        </div>
+        <div class="total-votes">${voteData.total} total votes</div>
+      </div>
+    `;
+
+    if (userSignedIn) {
+      addNodeIcon = `
+        <div class="speech-bubble-icon" title="Add Child Node">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="#1976d2"/></svg>
+        </div>
+      `;
+    }
+    
     var nodeObj = {
-      text: { name: node.text.name },
+      innerHTML: `<div class="node-content-wrapper"><div class="node-content">${node.text.name}</div>${votingHtml}</div>${addNodeIcon}`,
       HTMLid: 'node-' + node.id,
+      HTMLclass: 'node-' + (node.child_type || 'default').toLowerCase(),
       connectors: {
-        style: {
-          'stroke': '#1976d2',
-          'arrow-end': 'oval-wide-long'
-        }
+        style: { 'stroke': '#ccc', 'stroke-width': 2, 'arrow-end': 'oval-wide-long' }
       }
     };
+
     if (node.children && node.children.length > 0) {
       nodeObj.children = node.children.map(buildNodeStructure);
     }
     return nodeObj;
   }
 
-  if (!railsTree) {
-    console.log('No tree data to render.');
-    return;
-  }
-
-  // Clear existing tree if any
-  var container = document.getElementById('tree-simple');
-  if (container) {
-    container.innerHTML = '';
-  }
-
-  console.log('Tree structure before rendering:', railsTree);
-
   var treantConfig = {
     chart: {
       container: "#tree-simple",
-      node: { 
-        HTMLclass: 'nodeExample1',
-        collapsable: true
-      },
-      connectors: { 
-        type: 'step',
-        style: {
-          'stroke-width': 2
-        }
-      },
-      animation: { 
-        nodeAnimation: "easeOutBounce",
-        nodeSpeed: 700,
-        connectorsAnimation: "bounce",
-        connectorSpeed: 700
-      }
+      levelSeparation: 100,
+      siblingSeparation: 60,
+      subTeeSeparation: 60,
+      node: { HTMLclass: 'nodeExample1' },
+      connectors: { type: 'step' }
     },
     nodeStructure: buildNodeStructure(railsTree)
   };
 
   console.log('Creating Treant with config:', treantConfig);
-  new Treant(treantConfig, function() {
-    if (userSignedIn) {
-      nodeIds.forEach(function(id) {
-        var nodeDiv = document.getElementById('node-' + id);
-        if (nodeDiv) {
-          console.log('Setting up node:', id);
-          // Add speech bubble icon for logged-in users
-          var icon = document.createElement('div');
-          icon.innerHTML = `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16 2C8.26801 2 2 7.26801 2 14C2 17.326 3.38376 20.3341 5.65454 22.5013C5.77231 22.6135 5.84201 22.7678 5.84201 22.9293V29.2858C5.84201 29.7209 6.32327 29.9848 6.69379 29.7608L12.2225 26.5159C12.3857 26.4205 12.5752 26.3901 12.7584 26.4301C13.7843 26.6754 14.8696 26.8071 16 26.8071C23.732 26.8071 30 21.5391 30 14.8071C30 7.26801 23.732 2 16 2Z" fill="#1976d2"/>
-          </svg>`;
-          icon.className = 'speech-bubble-icon';
-          icon.title = 'Add Child Node';
-          console.log('Creating icon for node:', id);
-          nodeDiv.appendChild(icon);
-          console.log('Icon added to node');
-          
-          icon.onclick = function(e) {
-            e.stopPropagation();
-            console.log('Setting up node:', id);
-            var $modal = $('#addNodeModal');
-            if ($modal.length) {
-              $('#node_parent_id').val(id);
-              // Reset form fields
-              $('#node_content').val('');
-              $('#node_url').val('');
-              $('#urlPreview').hide();
-              $('#confirmUrlBtn').hide();
-              $('#url_confirmed').val(false);
-              $('#addNodeSubmit').prop('disabled', true);
-              
-              $modal.foundation('open');
-            } else {
-              console.error('Modal not found');
-            }
-          };
-
-          // Add click handler for selection
-          nodeDiv.onclick = function(e) {
-            e.stopPropagation();
-            console.log('Node clicked:', id);
-            // Deselect all nodes
-            document.querySelectorAll('.nodeExample1.selected-node').forEach(function(n) {
-              n.classList.remove('selected-node');
-            });
-            // Select this node
-            nodeDiv.classList.add('selected-node');
-            console.log('Node selected, classes:', nodeDiv.className);
-          };
-        }
-      });
-    }
-
-    // Deselect nodes when clicking outside
-    document.body.addEventListener('click', function(e) {
-      if (!e.target.closest('.nodeExample1')) {
-        document.querySelectorAll('.nodeExample1.selected-node').forEach(function(n) {
-          n.classList.remove('selected-node');
-        });
+  new Treant(treantConfig);
+  
+  // Add a click listener for anonymous users
+  if (!userSignedIn) {
+    const treeContainer = document.getElementById('tree-simple');
+    treeContainer.addEventListener('click', function(e) {
+      // Prevent any node interaction for anonymous users
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Display a flash message
+      const flashContainer = document.querySelector('.flash-container');
+      if (flashContainer) {
+        const message = treeContainer.dataset.loginToEditMessage;
+        
+        // Construct the flash message HTML based on _flash.html.erb
+        const flashDiv = document.createElement('div');
+        flashDiv.id = 'flash_notice'; // or 'flash_alert' for errors
+        flashDiv.className = 'notice-container callout-slide';
+        flashDiv.setAttribute('data-closable', '');
+        flashDiv.innerHTML = `
+          <div class="callout notice primary">
+            <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="notice-text">
+              ${message}
+            </div>
+          </div>
+        `;
+        
+        flashContainer.appendChild(flashDiv);
+        
+        // Initialize Foundation on the new element
+        $(flashDiv).foundation();
       }
-    });
+    }, true); // Use capture phase to catch the event early
+  }
+
+  // Set initial button states and fill percentages from pre-loaded data
+  nodeIds.forEach(function(nodeId) {
+    const nodeElement = document.getElementById('node-' + nodeId);
+    if (nodeElement) {
+      const voteData = findNodeById(railsTree, nodeId)?.vote_data;
+      if (voteData) {
+        updateVoteDisplay(nodeId, voteData); 
+        if (userSignedIn) {
+          updateButtonState(nodeId, voteData.user_vote);
+        }
+      }
+    }
   });
 
   if (userSignedIn) {
-    // URL validation and confirmation logic
-    var urlField = $('#node_url');
-    var confirmBtn = $('#confirmUrlBtn');
-    var urlPreview = $('#urlPreview');
-    var addNodeSubmit = $('#addNodeSubmit');
-    var urlConfirmedField = $('#url_confirmed');
-    var urlValid = false;
-    var urlConfirmed = false;
+    console.log("User is signed in. Setting up votes and listeners.");
+    setupVotingListeners();
+    setupNodeAdditionListeners();
+  }
+  console.log('--- initializeDecisionTree ENDS ---');
+}
 
-    function validateUrl(url) {
-      try {
-        var u = new URL(url);
-        return u.protocol === 'http:' || u.protocol === 'https:';
-      } catch (e) {
-        return false;
+function findNodeById(node, id) {
+  if (node.id == id) {
+    return node;
+  }
+  if (node.children) {
+    for (const child of node.children) {
+      const found = findNodeById(child, id);
+      if (found) {
+        return found;
       }
     }
+  }
+  return null;
+}
 
-    urlField.on('input', function() {
-      var url = urlField.val().trim();
-      urlValid = validateUrl(url);
-      urlConfirmed = false;
-      urlConfirmedField.val(false);
-      addNodeSubmit.prop('disabled', true);
-      if (urlValid) {
-        urlPreview.text(url);
-        urlPreview.show();
-        confirmBtn.show();
+function setupVotingListeners() {
+  console.log('setupVotingListeners called.');
+  const treeContainer = document.getElementById('tree-simple');
+  if (treeContainer.dataset.listenerAttached) {
+    console.log("Listener already attached. Skipping.");
+    return;
+  }
+  treeContainer.dataset.listenerAttached = 'true';
+  treeContainer.addEventListener('click', function(e) {
+    const button = e.target.closest('.vote-button');
+    if (button) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('Vote button clicked.');
+      
+      const nodeId = button.dataset.nodeId;
+      const voteType = button.dataset.voteType;
+      const treeId = button.dataset.treeId;
+      const isVoted = button.classList.contains('voted');
+      
+      if (isVoted) {
+        console.log(`Removing vote for node #${nodeId}`);
+        removeVote(treeId, nodeId, voteType);
       } else {
-        urlPreview.hide();
-        confirmBtn.hide();
+        console.log(`Adding '${voteType}' vote for node #${nodeId}`);
+        addVote(treeId, nodeId, voteType);
       }
-    });
-    console.log('Added event listener for urlField input');
+    }
+  });
+}
 
-    confirmBtn.on('click', function() {
-      urlConfirmed = true;
-      urlConfirmedField.val(true);
-      confirmBtn.text('URL Confirmed');
-      confirmBtn.prop('disabled', true);
-      addNodeSubmit.prop('disabled', false);
-    });
-    console.log('Added event listener for confirmBtn click');
+function setupNodeAdditionListeners() {
+  console.log('setupNodeAdditionListeners called.');
+  const treeContainer = document.getElementById('tree-simple');
 
-    $('#node_content').on('input', function() {
-      var content = $(this).val().trim();
-      var url = urlField.val().trim();
-      if ((content && !url) || (url && urlConfirmed)) {
-        addNodeSubmit.prop('disabled', false);
+  if (treeContainer.dataset.nodeAdditionListener) {
+    console.log("Node addition listener already attached. Skipping.");
+    return;
+  }
+  treeContainer.dataset.nodeAdditionListener = 'true';
+
+  treeContainer.addEventListener('click', function(e) {
+    const clickedIcon = e.target.closest('.speech-bubble-icon');
+    const clickedNode = e.target.closest('.nodeExample1');
+
+    // Handle clicking the "add" icon, which takes precedence.
+    if (clickedIcon) {
+      e.stopPropagation();
+      const parentNode = clickedIcon.closest('.nodeExample1');
+      const nodeId = parentNode.id.replace('node-', '');
+      
+      console.log(`Add icon clicked for node #${nodeId}`);
+
+      const $modal = $('#addNodeModal');
+      if ($modal.length) {
+        $('#node_parent_id').val(nodeId);
+        // Reset form fields
+        $('#node_content').val('');
+        $('#node_url').val('');
+        
+        // This assumes Foundation is available for the modal
+        $modal.foundation('open');
       } else {
-        addNodeSubmit.prop('disabled', true);
+        console.error('Add node modal not found!');
       }
-    });
-    console.log('Added event listener for node_content input');
+      return;
+    }
+
+    // Handle selecting/deselecting the node itself.
+    if (clickedNode) {
+      // If a node was clicked (but not the icon), toggle its selection.
+      const isSelected = clickedNode.classList.contains('selected-node');
+      
+      // First, deselect all nodes.
+      document.querySelectorAll('.nodeExample1.selected-node').forEach(node => {
+        node.classList.remove('selected-node');
+      });
+
+      // If the clicked node was not already selected, select it.
+      if (!isSelected) {
+        clickedNode.classList.add('selected-node');
+      }
+    } else {
+      // If the click was outside any node, deselect all.
+      document.querySelectorAll('.nodeExample1.selected-node').forEach(node => {
+        node.classList.remove('selected-node');
+      });
+    }
+  });
+}
+
+function addVote(treeId, nodeId, voteType) {
+  console.log(`Executing addVote AJAX call for node #${nodeId}`);
+  const formData = new URLSearchParams();
+  formData.append('node_vote[vote_type]', voteType);
+  
+  fetch(`/decision_trees/${treeId}/decision_nodes/${nodeId}/node_vote`, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(`Received response from addVote for node #${nodeId}:`, data);
+    if (data.success) {
+      updateVoteDisplay(nodeId, data.votes);
+      updateButtonState(nodeId, data.votes.user_vote);
+    } else {
+      console.error('Error recording vote:', data.error);
+    }
+  })
+  .catch(error => console.error('AJAX error in addVote:', error));
+}
+
+function removeVote(treeId, nodeId, voteType) {
+  console.log(`Executing removeVote AJAX call for node #${nodeId}`);
+  fetch(`/decision_trees/${treeId}/decision_nodes/${nodeId}/node_vote`, {
+    method: 'DELETE',
+    headers: {
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(`Received response from removeVote for node #${nodeId}:`, data);
+    if (data.success) {
+      updateVoteDisplay(nodeId, data.votes);
+      updateButtonState(nodeId, null);
+    } else {
+      console.error('Error removing vote:', data.error);
+    }
+  })
+  .catch(error => console.error('AJAX error in removeVote:', error));
+}
+
+function updateVoteDisplay(nodeId, voteData) {
+  console.log(`Updating display for node #${nodeId} with data:`, voteData);
+  const nodeElement = document.getElementById('node-' + nodeId);
+  
+  if (nodeElement) {
+    const likesCount = nodeElement.querySelector('.in-favor .vote-count');
+    const likesPercentageEl = nodeElement.querySelector('.in-favor .percentage');
+    const dislikesCount = nodeElement.querySelector('.against .vote-count');
+    const dislikesPercentageEl = nodeElement.querySelector('.against .percentage');
+    const totalVotes = nodeElement.querySelector('.total-votes');
+    
+    const likeButton = nodeElement.querySelector('.like-button');
+    const dislikeButton = nodeElement.querySelector('.dislike-button');
+
+    if (likesCount) likesCount.textContent = voteData.likes || 0;
+    if (likesPercentageEl) likesPercentageEl.textContent = voteData.likes_percentage || '0%';
+    if (dislikesCount) dislikesCount.textContent = voteData.dislikes || 0;
+    if (dislikesPercentageEl) dislikesPercentageEl.textContent = voteData.dislikes_percentage || '0%';
+    if (totalVotes) totalVotes.textContent = `${voteData.total || 0} total votes`;
+
+    if (likeButton) {
+      likeButton.style.setProperty('--fill-percentage', voteData.likes_percentage || '0%');
+    }
+    if (dislikeButton) {
+      dislikeButton.style.setProperty('--fill-percentage', voteData.dislikes_percentage || '0%');
+    }
+  } else {
+    console.error('Could not find node element for ID:', nodeId);
   }
 }
 
-// Initialize on both DOMContentLoaded and turbolinks:load
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('DOMContentLoaded event fired');
-  if (window.decisionTreeData) {
-    initializeDecisionTree(window.decisionTreeData.railsTree, window.decisionTreeData.nodeIds, window.decisionTreeData.userSignedIn);
-  }
-});
+function updateButtonState(nodeId, userVote) {
+  console.log(`Updating button state for node #${nodeId}. User vote is: ${userVote}`);
+  const nodeElement = document.getElementById('node-' + nodeId);
+  if (!nodeElement) return;
+  
+  const likeButton = nodeElement.querySelector('.like-button');
+  const dislikeButton = nodeElement.querySelector('.dislike-button');
 
-document.addEventListener('turbolinks:load', function() {
-  console.log('turbolinks:load event fired');
-  if (window.decisionTreeData) {
-    initializeDecisionTree(window.decisionTreeData.railsTree, window.decisionTreeData.nodeIds, window.decisionTreeData.userSignedIn);
+  // Reset both buttons
+  likeButton.classList.remove('voted');
+  dislikeButton.classList.remove('voted');
+
+  if (userVote === 'like') {
+    likeButton.classList.add('voted');
+  } else if (userVote === 'dislike') {
+    dislikeButton.classList.add('voted');
   }
-}); 
+} 

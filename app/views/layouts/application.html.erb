@@ -14,6 +14,9 @@
     <%= render Layout::CookiesConsent::Vendors::ScriptsComponent.new %>
   </head>
   <body class="<%= yield(:body_class) %> public">
+    <div class="flash-container">
+      <%= render "layouts/flash" %>
+    </div>
     <%= render Layout::SkipToMainContentComponent.new %>
     <%= raw setting["html.per_page_code_body"] %>
 
@@ -21,7 +24,6 @@
       <%= render "layouts/header" %>
 
       <main id="main" class="public-content <%= yield(:main_class) %>">
-        <%= render "layouts/flash" %>
         <%= yield %>
       </main>
     </div>

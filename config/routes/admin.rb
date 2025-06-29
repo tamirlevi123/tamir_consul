@@ -312,6 +312,8 @@ namespace :admin do
     namespace :cookies do
       resources :vendors, except: [:index, :show]
     end
+
+    resources :decision_trees, only: [:index, :show, :destroy]
   end
 end
 

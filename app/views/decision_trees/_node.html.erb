@@ -2,21 +2,8 @@
   <div class="node-content">
     <h3><%= node.content %></h3>
     
-    <div class="node-actions">
-      <%= form_for NodeVote.new, url: decision_tree_node_votes_path(@decision_tree, node) do |f| %>
-        <%= f.hidden_field :vote_type, value: 'like' %>
-        <%= f.submit '👍', class: 'button tiny' %>
-      <% end %>
-      
-      <%= form_for NodeVote.new, url: decision_tree_node_votes_path(@decision_tree, node) do |f| %>
-        <%= f.hidden_field :vote_type, value: 'dislike' %>
-        <%= f.submit '👎', class: 'button tiny' %>
-      <% end %>
-    </div>
-
-    <div class="node-votes">
-      Likes: <%= node.node_votes.where(vote_type: 'like').count %>
-      Dislikes: <%= node.node_votes.where(vote_type: 'dislike').count %>
+    <div id="decision-node-<%= node.id %>-votes">
+      <%= render DecisionNodes::InFavorAgainstComponent.new(node, @decision_tree) %>
     </div>
   </div>
 

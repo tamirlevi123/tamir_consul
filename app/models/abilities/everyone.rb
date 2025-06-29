@@ -29,6 +29,11 @@ module Abilities
 
       can [:read, :help], ::SDG::Goal
       can :read, ::SDG::Phase
+
+      can :read, [Debate, Proposal, Budget, Budget::Investment, Poll, Poll::Question, Legislation::Process, Legislation::Proposal, Topic, ::SDG::Target, ::SDG::LocalTarget, DecisionTree]
+      can :read, [Comment, User, Geozone, Organization]
+      can :read, [Legislation::Question]
+      can :see_custom_content, [Budget]
     end
   end
 end

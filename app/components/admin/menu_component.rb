@@ -18,6 +18,7 @@ class Admin::MenuComponent < ApplicationComponent
         (debates_link if feature?(:debates)),
         comments_link,
         (polls_link if feature?(:polls)),
+        decision_trees_link,
         (legislation_link if feature?(:legislation)),
         (budgets_link if feature?(:budgets)),
         booths_links,
@@ -134,6 +135,15 @@ class Admin::MenuComponent < ApplicationComponent
         admin_polls_path,
         polls?,
         class: "polls-link"
+      ]
+    end
+
+    def decision_trees_link
+      [
+        t("admin.menu.decision_trees"),
+        admin_decision_trees_path,
+        controller_name == "decision_trees",
+        class: "decision-trees-link"
       ]
     end
 

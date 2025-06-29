@@ -9,15 +9,8 @@ class DecisionTreesController < ApplicationController
 
   def show
     @decision_tree = DecisionTree.find(params[:id])
-    @root_node = @decision_tree.root_node
-    
-    if @root_node
-      @tree_data = build_tree_data(@root_node)
-      @node_ids = collect_node_ids(@root_node)
-    else
-      @tree_data = nil
-      @node_ids = []
-    end
+    @tree_data = @decision_tree.to_json_tree
+    @node_ids = @decision_tree.decision_nodes.pluck(:id)
   end
 
   def new
@@ -33,6 +26,16 @@ class DecisionTreesController < ApplicationController
     end
   end
 
+  def destroy
+    @decision_tree = DecisionTree.find(params[:id])
+    
+    if @decision_tree.destroy
+      redirect_to decision_trees_path, notice: 'Decision tree was successfully deleted.'
+    else
+      redirect_to @decision_tree, alert: 'Error deleting decision tree.'
+    end
+  end
+
   private
 
   def set_decision_tree
@@ -43,17 +46,29 @@ class DecisionTreesController < ApplicationController
     params.require(:decision_tree).permit(:title, :description)
   end
 
-  def build_tree_data(node)
+  def build_tree_data(node, vote_data)
     {
       id: node.id,
+      tree_id: @decision_tree.id,
       text: {
-        name: node.content
+        name: sanitize(node.content)
       },
-      children: node.child_nodes.map { |child| build_tree_data(child) }
+      child_type: node.child_type,
+      children: node.child_nodes.map { |child| build_tree_data(child, vote_data) },
+      vote_data: vote_data[node.id]
     }
   end
 
   def collect_node_ids(node)
     [node.id] + node.child_nodes.flat_map { |child| collect_node_ids(child) }
+  end
+
+  def sanitize(content)
+    ActionController::Base.helpers.sanitize(content)
+  end
+
+  def calculate_percentage(part, total)
+    return "0%" if total == 0
+    "#{(part.to_f / total * 100).round}%"
   end
 end 

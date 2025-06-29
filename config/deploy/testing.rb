@@ -1,6 +1,9 @@
 set :stage, :testing
 set :rails_env, :testing
 
+# Disable socket service for testing environment (uses TCP binding)
+set :puma_enable_socket_service, false
+
 # Set environment variables for Rails
 env_path = File.expand_path('../../shared/.env', __dir__)
 postgres_password = nil
@@ -64,6 +67,42 @@ Rake::Task['rvm1:hook'].clear_actions
 # Testing environment specific settings
 namespace :deploy do
   namespace :testing do
+    desc 'Clean up existing socket services and restart Puma'
+    task :cleanup_and_restart do
+      on roles(:app) do
+        # Stop and disable socket service if it exists
+        execute :systemctl, "--user", "stop", "#{fetch(:puma_service_unit_name)}.socket", "||", "true"
+        execute :systemctl, "--user", "disable", "#{fetch(:puma_service_unit_name)}.socket", "||", "true"
+        
+        # Restart the main Puma service
+        execute :systemctl, "--user", "restart", fetch(:puma_service_unit_name)
+        execute :systemctl, "--user", "enable", fetch(:puma_service_unit_name)
+      end
+    end
+
+    desc 'Force reinstall Puma service with updated configuration'
+    task :reinstall_puma do
+      on roles(:app) do
+        # Stop and disable existing services
+        execute :systemctl, "--user", "stop", fetch(:puma_service_unit_name), "||", "true"
+        execute :systemctl, "--user", "disable", fetch(:puma_service_unit_name), "||", "true"
+        execute :systemctl, "--user", "stop", "#{fetch(:puma_service_unit_name)}.socket", "||", "true"
+        execute :systemctl, "--user", "disable", "#{fetch(:puma_service_unit_name)}.socket", "||", "true"
+        
+        # Remove old service files
+        execute :rm, "-f", "/home/azureuser/.config/systemd/user/#{fetch(:puma_service_unit_name)}.service"
+        execute :rm, "-f", "/home/azureuser/.config/systemd/user/#{fetch(:puma_service_unit_name)}.socket"
+        
+        # Reinstall the service with updated configuration
+        invoke "puma:install"
+        
+        # Reload daemon and enable the service
+        execute :systemctl, "--user", "daemon-reload"
+        execute :systemctl, "--user", "enable", fetch(:puma_service_unit_name)
+        execute :systemctl, "--user", "start", fetch(:puma_service_unit_name)
+      end
+    end
+
     desc 'Configure testing environment SSH settings'
     task :configure_ssh do
       # SSH configuration is now set globally above
@@ -141,6 +180,7 @@ before 'deploy:migrate', 'deploy:testing:debug_env'
 before 'deploy:migrate', 'deploy:testing:check_env_file'
 
 after 'deploy:publishing', 'deploy:restart'
+after 'deploy:finished', 'deploy:testing:cleanup_and_restart'
 
 set :deploy_via, :copy
 

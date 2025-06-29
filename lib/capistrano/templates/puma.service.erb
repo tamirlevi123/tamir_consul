@@ -11,7 +11,6 @@
 #
 [Unit]
 Description=Puma HTTP Server for <%= "#{fetch(:application)} (#{fetch(:stage)})" %>
-<%= "Requires=#{fetch(:puma_service_unit_name)}.socket" if fetch(:puma_enable_socket_service) %>
 After=network.target
 
 [Service]
@@ -19,21 +18,21 @@ Type=simple
 WatchdogSec=0
 
 WorkingDirectory=<%= current_path %>
-Environment=PATH=/home/azureuser/.rvm/gems/ruby-3.3.8/bin:/home/azureuser/.rvm/gems/ruby-3.3.8@global/bin:/home/azureuser/.rvm/rubies/ruby-3.3.8/bin:/home/azureuser/.rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-Environment=GEM_HOME=/home/azureuser/apps/consul231/shared/bundle
-Environment=BUNDLE_PATH=/home/azureuser/apps/consul231/shared/bundle
-Environment=RAILS_ENV=testing
-Environment=RACK_ENV=testing
-Environment=BUNDLE_GEMFILE=/home/azureuser/apps/consul231/current/Gemfile
+Environment=PATH=<%= fetch(:rvm_custom_path, '/home/deploy/.rvm') %>/gems/ruby-<%= fetch(:rvm_ruby_version, '3.3.8') %>/bin:<%= fetch(:rvm_custom_path, '/home/deploy/.rvm') %>/gems/ruby-<%= fetch(:rvm_ruby_version, '3.3.8') %>@global/bin:<%= fetch(:rvm_custom_path, '/home/deploy/.rvm') %>/rubies/ruby-<%= fetch(:rvm_ruby_version, '3.3.8') %>/bin:<%= fetch(:rvm_custom_path, '/home/deploy/.rvm') %>/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Environment=GEM_HOME=<%= shared_path %>/bundle
+Environment=BUNDLE_PATH=<%= shared_path %>/bundle
+Environment=RAILS_ENV=<%= fetch(:rails_env) %>
+Environment=RACK_ENV=<%= fetch(:rails_env) %>
+Environment=BUNDLE_GEMFILE=<%= current_path %>/Gemfile
 
-ExecStart=/home/azureuser/.rvm/gems/ruby-3.3.8/bin/bundle exec puma -C config/puma/testing.rb
+ExecStart=<%= fetch(:rvm_custom_path, '/home/deploy/.rvm') %>/rubies/ruby-<%= fetch(:rvm_ruby_version, '3.3.8') %>/bin/bundle exec puma -C config/puma/<%= fetch(:rails_env) %>.rb
 ExecReload=/bin/kill -USR1 $MAINPID
 
 RestartSec=1
 Restart=on-failure
 
-StandardOutput=append:/home/azureuser/apps/consul231/shared/log/puma_access.log
-StandardError=append:/home/azureuser/apps/consul231/shared/log/puma_error.log
+StandardOutput=append:<%= shared_path %>/log/puma_access.log
+StandardError=append:<%= shared_path %>/log/puma_error.log
 
 SyslogIdentifier=puma
 

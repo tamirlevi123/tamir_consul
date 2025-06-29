@@ -147,6 +147,10 @@ module Abilities
       if Rails.application.config.multitenancy && Tenant.default?
         can [:create, :read, :update, :hide, :restore], Tenant
       end
+
+      can :manage, [Budget, Budget::Group, Budget::Heading, Budget::Phase, Budget::Investment,
+                     Milestone, ProgressBar, Milestone::Status, Poll::Officer]
+      can :destroy, DecisionTree
     end
   end
 end

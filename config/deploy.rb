@@ -18,6 +18,11 @@ set :rails_env, fetch(:stage)
 # set :default_env, { EXECJS_RUNTIME: "Disabled" }
 set :rvm1_map_bins, -> { fetch(:rvm_map_bins).to_a.concat(%w[rake gem bundle ruby]).uniq }
 
+# RVM Configuration - will be used by the Puma service template
+set :rvm_type, :user
+set :rvm_ruby_version, '3.3.8'
+set :rvm_custom_path, '/home/deploy/.rvm'
+
 set :application, deploysecret(:app_name, default: "consul")
 set :deploy_to, deploysecret(:deploy_to)
 set :ssh_options, port: deploysecret(:ssh_port)

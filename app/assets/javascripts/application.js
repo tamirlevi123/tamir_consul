@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require foundation-sites
 //= require jquery-ujs
 //= require jquery-ui/ui/version
 //= require jquery-ui/ui/data
@@ -58,6 +59,7 @@
 //= require ckeditor/loader
 //= require_directory ./ckeditor
 //= require social-share-button
+//= require decision_tree
 //= require app
 //= require check_all_none
 //= require comments
@@ -82,7 +84,6 @@
 //= require embed_video
 //= require fixed_bar
 //= require banners
-//= require social_share
 //= require checkbox_toggle
 //= require markdown-it/dist/markdown-it
 //= require markdown_editor
@@ -110,21 +111,11 @@
 //= require investment_report_alert
 //= require managers
 //= require i18n
-//= require globalize
-//= require settings
-//= require cookies
-//= require cookies_consent
-//= require columns_selector
-//= require budget_edit_associations
-//= require budget_hide_money
-//= require datepicker
-//= require authenticity_token_refresh
 //= require_tree ./admin
 //= require_tree ./sdg
 //= require_tree ./sdg_management
 //= require_tree ./custom
 //= require custom
-//= require decision_tree
 
 var initialize_modules = function() {
   "use strict";
@@ -158,7 +149,7 @@ var initialize_modules = function() {
   App.Documentable.initialize();
   App.Imageable.initialize();
   App.TagAutocomplete.initialize();
-  App.Map.initialize();
+  // App.Map.initialize();
   App.Polls.initialize();
   App.Sortable.initialize();
   App.TableSortable.initialize();
@@ -192,7 +183,7 @@ var destroy_non_idempotent_modules = function() {
   App.Datepicker.destroy();
   App.HTMLEditor.destroy();
   App.LegislationAnnotatable.destroy();
-  App.Map.destroy();
+  // App.Map.destroy();
   App.SocialShare.destroy();
 };
 

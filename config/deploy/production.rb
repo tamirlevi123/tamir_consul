@@ -1,4 +1,4 @@
-set :branch, ENV["branch"] || :testing-deploy
+set :branch, ENV["branch"] || "testing-deploy"
 
 server main_deploy_server, user: deploysecret(:user), roles: %w[web app db importer cron background]
 #server deploysecret(:server2), user: deploysecret(:user), roles: %w(web app db importer cron background)

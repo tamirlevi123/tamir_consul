@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_11_163025) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_27_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -556,6 +556,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_11_163025) do
     t.datetime "updated_at", null: false
     t.string "url"
     t.boolean "url_confirmed", default: false, null: false
+    t.integer "child_type"
     t.index ["decision_tree_id"], name: "index_decision_nodes_on_decision_tree_id"
     t.index ["parent_id"], name: "index_decision_nodes_on_parent_id"
     t.index ["user_id"], name: "index_decision_nodes_on_user_id"
