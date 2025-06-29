@@ -1,0 +1,45 @@
+.vote-button {
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease;
+  z-index: 1;
+}
+
+.vote-button::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--fill-percentage, 0%);
+  z-index: -1;
+  transition: height 0.3s ease-in-out;
+}
+
+.like-button::before {
+  background-color: rgba(0, 255, 0, 0.3);
+}
+
+.dislike-button::before {
+  background-color: rgba(255, 0, 0, 0.3);
+}
+
+.vote-button.voted {
+  color: #fff;
+}
+
+.nodeExample1.node-root {
+  border: 3px solid black;
+}
+
+.nodeExample1.node-pro {
+  border: 3px solid green;
+}
+
+.nodeExample1.node-con {
+  border: 3px solid red;
+}
+
+.nodeExample1.node-neutral {
+  border: 3px solid blue;
+} 
