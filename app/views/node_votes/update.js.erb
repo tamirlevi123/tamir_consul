@@ -1,0 +1,1 @@
+$("#decision-node-<%= @decision_node.id %>-votes").html("<%= j render DecisionNodes::InFavorAgainstComponent.new(@decision_node, @decision_tree) %>"); 

@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="small-12 column">
+    <h1><%= t("admin.decision_trees.index.title") %></h1>
+
+    <% if @decision_trees.any? %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th><%= t("admin.decision_trees.index.id_header") %></th>
+            <th><%= t("admin.decision_trees.index.title_header") %></th>
+            <th><%= t("admin.decision_trees.index.description_header") %></th>
+            <th><%= t("admin.decision_trees.index.user_header") %></th>
+            <th><%= t("admin.decision_trees.index.node_count_header") %></th>
+            <th><%= t("admin.decision_trees.index.created_at_header") %></th>
+            <th><%= t("admin.decision_trees.index.actions_header") %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @decision_trees.each do |decision_tree| %>
+            <tr>
+              <td><%= decision_tree.id %></td>
+              <td>
+                <%= link_to decision_tree.title, admin_decision_tree_path(decision_tree) %>
+              </td>
+              <td><%= truncate(decision_tree.description, length: 100) %></td>
+              <td><%= decision_tree.user&.name || t("admin.decision_trees.index.unknown_user") %></td>
+              <td><%= decision_tree.decision_nodes.size %></td>
+              <td><%= l(decision_tree.created_at, format: :short) %></td>
+              <td>
+                <%= link_to t("admin.decision_trees.index.view"), 
+                           admin_decision_tree_path(decision_tree), 
+                           class: "button hollow" %>
+                <%= link_to t("admin.decision_trees.index.delete"), 
+                           admin_decision_tree_path(decision_tree), 
+                           method: :delete,
+                           data: { confirm: t("admin.decision_trees.index.delete_confirmation") },
+                           class: "button alert" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="callout primary">
+        <%= t("admin.decision_trees.index.no_trees") %>
+      </div>
+    <% end %>
+  </div>
+</div> 

@@ -1,0 +1,115 @@
+.decision-node-votes {
+  @include flex-with-gap($line-height * 0.75);
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 0.5rem;
+  border: 1px solid #e9ecef;
+
+  &,
+  .in-favor,
+  .against {
+    display: inline-block;
+  }
+
+  .vote-button {
+    background: #fff;
+    border-radius: rem-calc(3);
+    color: $dark-gray;
+    display: inline-block;
+    font-size: rem-calc(20);
+    line-height: rem-calc(20);
+    padding: rem-calc(6) rem-calc(8);
+    position: relative;
+    text-decoration: none;
+    border: 2px solid #e9ecef;
+    transition: all 0.2s ease;
+
+    &:hover {
+      text-decoration: none;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    &[aria-pressed=true] {
+      border-style: inset;
+      border-width: 3px 2px 2px 3px;
+
+      &:active {
+        border-style: outset;
+        border-width: 2px 3px 3px 2px;
+      }
+    }
+
+    &[aria-pressed=false] {
+      border-style: outset;
+      border-width: 2px 3px 3px 2px;
+
+      &:active {
+        border-style: inset;
+        border-width: 3px 2px 2px 3px;
+      }
+    }
+
+    &.like-button {
+      &:not([aria-pressed=true]) {
+        &:hover {
+          border-color: $like;
+          color: $like;
+        }
+      }
+
+      &[aria-pressed=true] {
+        background: $like;
+        border-color: $like;
+        color: #fff;
+      }
+    }
+
+    &.dislike-button {
+      &:not([aria-pressed=true]) {
+        &:hover {
+          border-color: $unlike;
+          color: $unlike;
+        }
+      }
+
+      &[aria-pressed=true] {
+        background: $unlike;
+        border-color: $unlike;
+        color: #fff;
+      }
+    }
+  }
+
+  .vote-count {
+    display: inline-block;
+    font-weight: bold;
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .percentage {
+    display: block;
+    font-size: $small-font-size;
+    line-height: $line-height;
+    color: $dark-gray;
+    margin-top: 0.25rem;
+  }
+
+  .total-votes {
+    display: block;
+    font-size: $small-font-size;
+    color: $dark-gray;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+
+  .in-favor {
+    text-align: center;
+  }
+
+  .against {
+    text-align: center;
+  }
+} 

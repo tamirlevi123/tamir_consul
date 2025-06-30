@@ -1,0 +1,23 @@
+<div class="decision-node-votes">
+  <div class="in-favor">
+    <%= render DecisionNodes::VoteButtonComponent.new(decision_node, decision_tree,
+                                                     value: "yes",
+                                                     "aria-label": agree_aria_label,
+                                                     title: t("votes.agree")) %>
+    <span class="vote-count"><%= likes_count %></span>
+    <span class="percentage"><%= likes_percentage %></span>
+  </div>
+
+  <div class="against">
+    <%= render DecisionNodes::VoteButtonComponent.new(decision_node, decision_tree,
+                                                     value: "no",
+                                                     "aria-label": disagree_aria_label,
+                                                     title: t("votes.disagree")) %>
+    <span class="vote-count"><%= dislikes_count %></span>
+    <span class="percentage"><%= dislikes_percentage %></span>
+  </div>
+
+  <div class="total-votes">
+    <%= t("votes.total_votes", count: total_votes) %>
+  </div>
+</div> 

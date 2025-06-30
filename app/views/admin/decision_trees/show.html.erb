@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="small-12 column">
+    <div class="float-right">
+      <%= link_to t("admin.decision_trees.show.back_to_index"), 
+                 admin_decision_trees_path, 
+                 class: "button hollow" %>
+      <%= link_to t("admin.decision_trees.show.delete"), 
+                 admin_decision_tree_path(@decision_tree), 
+                 method: :delete,
+                 data: { confirm: t("admin.decision_trees.show.delete_confirmation") },
+                 class: "button alert" %>
+    </div>
+
+    <h1><%= @decision_tree.title %></h1>
+
+    <div class="callout">
+      <h3><%= t("admin.decision_trees.show.description") %></h3>
+      <p><%= @decision_tree.description %></p>
+    </div>
+
+    <div class="callout">
+      <h3><%= t("admin.decision_trees.show.details") %></h3>
+      <ul>
+        <li><strong><%= t("admin.decision_trees.show.created_by") %>:</strong> <%= @decision_tree.user&.name || t("admin.decision_trees.show.unknown_user") %></li>
+        <li><strong><%= t("admin.decision_trees.show.created_at") %>:</strong> <%= l(@decision_tree.created_at, format: :long) %></li>
+        <li><strong><%= t("admin.decision_trees.show.updated_at") %>:</strong> <%= l(@decision_tree.updated_at, format: :long) %></li>
+        <li><strong><%= t("admin.decision_trees.show.total_nodes") %>:</strong> <%= @node_ids.count %></li>
+      </ul>
+    </div>
+
+    <% if @tree_data %>
+      <div class="callout">
+        <h3><%= t("admin.decision_trees.show.tree_structure") %></h3>
+        <div id="decision-tree-container" 
+             data-tree="<%= @tree_data.to_json %>" 
+             data-node-ids="<%= @node_ids.to_json %>">
+          <!-- Tree will be rendered here by JavaScript -->
+        </div>
+      </div>
+    <% else %>
+      <div class="callout alert">
+        <%= t("admin.decision_trees.show.no_tree_data") %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% if @tree_data %>
+  <%= javascript_include_tag "decision_tree" %>
+<% end %> 
