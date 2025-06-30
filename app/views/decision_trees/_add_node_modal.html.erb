@@ -15,7 +15,7 @@
     <div class="row">
       <div class="small-12 column">
         <%= f.label :child_type, t("decision_nodes.add_node_modal.child_type_label", default: "Node Type") %>
-        <%= f.select :child_type, DecisionNode.child_types.keys.map { |k| [t("decision_nodes.child_types.#{k}", default: k.titleize), k] }, {}, class: "small-12", id: "node_child_type" %>
+        <%= f.select :child_type, DecisionNode.child_types.keys.reject { |k| k == "ROOT" }.map { |k| [t("decision_nodes.child_types.#{k}", default: k.titleize), k] }, {}, class: "small-12", id: "node_child_type" %>
         <small class="help-text"><%= t("decision_nodes.add_node_modal.child_type_help", default: "Choose the type of this node") %></small>
       </div>
     </div>

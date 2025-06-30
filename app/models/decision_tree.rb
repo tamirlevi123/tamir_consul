@@ -63,10 +63,12 @@ class DecisionTree < ApplicationRecord
 
   def create_root_node
     decision_nodes.create!(
-      content: title,
+      headline: title,
+      content: description,
       user: user,
       parent_id: nil,
-      position: 1
+      position: 1,
+      child_type: :ROOT
     )
   end
 end
