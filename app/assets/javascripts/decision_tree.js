@@ -38,6 +38,26 @@ function initializeDecisionTree(railsTree, nodeIds, userSignedIn) {
     var addNodeIcon = '';
     var voteData = node.vote_data || { likes: 0, dislikes: 0, total: 0, likes_percentage: '0%', dislikes_percentage: '0%' };
 
+    // Headline and content preview logic
+    var headline = node.text.headline || '';
+    var content = node.text.content || '';
+    var preview = content.split('\n')[0].slice(0, 100);
+    var isLong = content.length > preview.length;
+    var rest = isLong ? content.slice(preview.length).replace(/^\n?/, '') : '';
+
+    var contentHtml = `<h3 class='node-headline'>${headline}</h3>`;
+    if (content) {
+      contentHtml += `<div class='node-content-preview' style='${isLong ? '' : 'margin-bottom: 1em;'}; font-weight: normal;'>`;
+      contentHtml += `<span class='preview-text'>${preview}${isLong ? '...' : ''}</span>`;
+      if (isLong) {
+        contentHtml += `<button class='button small show-more-btn'>הצג עוד</button>`;
+      }
+      contentHtml += `</div>`;
+      if (isLong) {
+        contentHtml += `<div class='node-full-content' style='display: none; font-weight: normal;'><p>${rest}</p><button class='button small show-less-btn'>הצג פחות</button></div>`;
+      }
+    }
+
     var votingHtml = `
       <div class="node-voting-section">
         <div class="decision-node-votes">
@@ -69,7 +89,7 @@ function initializeDecisionTree(railsTree, nodeIds, userSignedIn) {
     }
     
     var nodeObj = {
-      innerHTML: `<div class="node-content-wrapper"><div class="node-content">${node.text.name}</div>${votingHtml}</div>${addNodeIcon}`,
+      innerHTML: `<div class="node-content-wrapper"><div class="node-content">${contentHtml}</div>${votingHtml}</div>${addNodeIcon}`,
       HTMLid: 'node-' + node.id,
       HTMLclass: 'node-' + (node.child_type || 'default').toLowerCase(),
       connectors: {
@@ -217,6 +237,35 @@ function setupNodeAdditionListeners() {
   treeContainer.addEventListener('click', function(e) {
     const clickedIcon = e.target.closest('.speech-bubble-icon');
     const clickedNode = e.target.closest('.nodeExample1');
+    const showMoreBtn = e.target.closest('.show-more-btn');
+    const showLessBtn = e.target.closest('.show-less-btn');
+
+    // Handle show more/less buttons
+    if (showMoreBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const nodeContent = showMoreBtn.closest('.node-content');
+      const fullContent = nodeContent.querySelector('.node-full-content');
+      const showLessBtn = nodeContent.querySelector('.show-less-btn');
+      
+      fullContent.style.display = 'block';
+      showMoreBtn.style.display = 'none';
+      showLessBtn.style.display = 'inline-block';
+      return;
+    }
+
+    if (showLessBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const nodeContent = showLessBtn.closest('.node-content');
+      const fullContent = nodeContent.querySelector('.node-full-content');
+      const showMoreBtn = nodeContent.querySelector('.show-more-btn');
+      
+      fullContent.style.display = 'none';
+      showLessBtn.style.display = 'none';
+      showMoreBtn.style.display = 'inline-block';
+      return;
+    }
 
     // Handle clicking the "add" icon, which takes precedence.
     if (clickedIcon) {
@@ -230,6 +279,7 @@ function setupNodeAdditionListeners() {
       if ($modal.length) {
         $('#node_parent_id').val(nodeId);
         // Reset form fields
+        $('#node_headline').val('');
         $('#node_content').val('');
         $('#node_url').val('');
         

@@ -7,6 +7,20 @@
                 class: "add-node-form") do |f| %>
     <div class="row">
       <div class="small-12 column">
+        <%= f.label :headline, t("decision_nodes.add_node_modal.headline_label", default: "Headline") %>
+        <%= f.text_field :headline, class: "small-12", id: "node_headline", placeholder: t("decision_nodes.add_node_modal.headline_placeholder", default: "Short headline for the tree view") %>
+        <small class="help-text"><%= t("decision_nodes.add_node_modal.headline_help", default: "A brief headline that will be displayed in the tree view") %></small>
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-12 column">
+        <%= f.label :child_type, t("decision_nodes.add_node_modal.child_type_label", default: "Node Type") %>
+        <%= f.select :child_type, DecisionNode.child_types.keys.map { |k| [t("decision_nodes.child_types.#{k}", default: k.titleize), k] }, {}, class: "small-12", id: "node_child_type" %>
+        <small class="help-text"><%= t("decision_nodes.add_node_modal.child_type_help", default: "Choose the type of this node") %></small>
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-12 column">
         <%= f.label :content, t("decision_nodes.add_node_modal.content_label") %>
         <%= f.text_area :content, rows: 4, class: "small-12", id: "node_content", placeholder: t("decision_nodes.add_node_modal.content_placeholder"), dir: "rtl" %>
       </div>

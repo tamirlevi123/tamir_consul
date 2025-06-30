@@ -7,11 +7,13 @@ class DecisionNode < ApplicationRecord
   
   enum child_type: { ROOT: 0, PRO: 1, CON: 2, NEUTRAL: 3 }
 
+  validates :headline, presence: true
   validates :content, presence: true, unless: -> { url.present? }
   validates :url, format: URI::regexp(%w[http https]), allow_blank: true
 
   before_create :set_position
   before_create :set_child_type_for_root
+  before_create :set_default_headline
 
   # Only allow saving if url is confirmed (for url nodes)
   def url_confirmation_required?
@@ -31,6 +33,13 @@ class DecisionNode < ApplicationRecord
       self.position = (parent.child_nodes.maximum(:position) || 0) + 1
     else
       self.position = 1
+    end
+  end
+
+  def set_default_headline
+    if headline.blank? && content.present?
+      self.headline = content.strip[0..99]
+      self.headline += "..." if content.length > 100
     end
   end
 end

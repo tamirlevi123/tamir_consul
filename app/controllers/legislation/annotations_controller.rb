@@ -11,6 +11,7 @@ class Legislation::AnnotationsController < Legislation::BaseController
   has_orders %w[most_voted newest oldest], only: :show
 
   def index
+    @annotations = @draft_version.annotations.includes(:comments, :author).order(:created_at)
   end
 
   def show
@@ -59,8 +60,10 @@ class Legislation::AnnotationsController < Legislation::BaseController
   end
 
   def search
+    Rails.logger.info "AnnotationsController#search called with params: \\#{params.inspect}"
     @annotations = @annotations.order(Arel.sql("LENGTH(quote) DESC"))
     annotations_hash = { total: @annotations.size, rows: @annotations }
+    Rails.logger.info "AnnotationsController#search returning \\#{annotations_hash[:rows].size} annotations"
     render json: annotations_hash.to_json(methods: :weight)
   end
 

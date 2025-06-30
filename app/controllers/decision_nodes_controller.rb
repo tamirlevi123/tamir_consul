@@ -25,7 +25,7 @@ class DecisionNodesController < ApplicationController
   end
 
   def decision_node_params
-    params.require(:decision_node).permit(:content, :url, :parent_id, :url_confirmed, :child_type)
+    params.require(:decision_node).permit(:headline, :content, :url, :parent_id, :url_confirmed, :child_type)
   end
 
   def calculate_percentage(count, total)

@@ -115,4 +115,10 @@
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-weight: bold;
   font-size: 12px;
-} 
+}
+
+.node-full-content,
+.node-full-content p,
+.node-full-content * {
+  font-weight: normal !important;
+}

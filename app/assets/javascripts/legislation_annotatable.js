@@ -1,5 +1,7 @@
 (function() {
   "use strict";
+  console.log(" 3 -LEGISLATION_ANNOTATABLE.JS: File loaded and executing");
+  window.App = window.App || {};
   App.LegislationAnnotatable = {
     makeEditableAndHighlight: function(colour) {
       var range, sel;
@@ -199,6 +201,7 @@
     },
     initialize: function() {
       var current_user_id;
+      console.log("Annotator: initialize called");
       $("body").on("renderLegislationAnnotation", App.LegislationAnnotatable.renderAnnotationComments);
       $("body").on("click", "[data-annotation-id]", App.LegislationAnnotatable.onClick);
       $("body").on("click", "[data-cancel-annotation]", function(e) {
@@ -210,6 +213,7 @@
       current_user_id = $("html").data("current-user-id");
       $(".legislation-annotatable").each(function() {
         var ann_id, base_url;
+        console.log("Annotator: found .legislation-annotatable", this);
         ann_id = $(this).data("legislation-draft-version-id");
         base_url = $(this).data("legislation-annotatable-base-url");
         App.LegislationAnnotatable.app = new annotator.App().include(function() {
@@ -230,7 +234,9 @@
             search: "/annotations/search"
           }
         });
+        console.log("Annotator: about to start app for", base_url);
         App.LegislationAnnotatable.app.start().then(function() {
+          console.log("Annotator: app started, loading annotations for", ann_id);
           App.LegislationAnnotatable.app.ident.identity = current_user_id;
           App.LegislationAnnotatable.app.annotations.load({
             legislation_draft_version_id: ann_id

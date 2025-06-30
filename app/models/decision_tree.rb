@@ -47,7 +47,8 @@ class DecisionTree < ApplicationRecord
       id: node.id,
       tree_id: self.id,
       text: {
-        name: ActionController::Base.helpers.sanitize(node.content || "")
+        headline: ActionController::Base.helpers.sanitize(node.headline || ""),
+        content: ActionController::Base.helpers.sanitize(node.content || "")
       },
       child_type: node.child_type,
       children: children,

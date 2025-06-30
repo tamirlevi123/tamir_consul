@@ -1,6 +1,23 @@
-<div class="decision-node">
+<div class="decision-node" id="node-<%= node.id %>">
   <div class="node-content">
-    <h3><%= node.content %></h3>
+    <h3 class="node-headline"><%= node.headline %></h3>
+    <div>🟢 NODE PARTIAL RENDERED</div>
+    <% if node.content.present? %>
+      <% preview = node.content.lines.first&.strip || node.content[0..99] %>
+      <% is_long = node.content.length > preview.length %>
+      <div class="node-content-preview" style="<%= is_long ? '' : 'margin-bottom: 1em;' %>">
+        <span class="preview-text"><%= preview %><%= is_long ? '...' : '' %></span>
+        <% if is_long %>
+          <button class="button small show-more-btn">הצג עוד</button>
+        <% end %>
+      </div>
+      <% if is_long %>
+        <div class="node-full-content" style="display: none;">
+          <p><%= node.content %></p>
+          <button class="button small show-less-btn">הצג פחות</button>
+        </div>
+      <% end %>
+    <% end %>
     
     <div id="decision-node-<%= node.id %>-votes">
       <%= render DecisionNodes::InFavorAgainstComponent.new(node, @decision_tree) %>

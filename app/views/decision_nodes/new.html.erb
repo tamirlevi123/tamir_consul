@@ -15,8 +15,15 @@
       <% end %>
 
       <div class="field">
+        <%= f.label :headline %>
+        <%= f.text_field :headline, placeholder: "Short headline for the tree view" %>
+        <p class="help-text">A brief headline that will be displayed in the tree view</p>
+      </div>
+
+      <div class="field">
         <%= f.label :content %>
-        <%= f.text_area :content, rows: 3 %>
+        <%= f.text_area :content, rows: 3, placeholder: "Detailed content of the node" %>
+        <p class="help-text">Full content that will be shown when expanded</p>
       </div>
 
       <div class="field">
