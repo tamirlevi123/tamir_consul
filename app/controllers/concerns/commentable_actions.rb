@@ -15,9 +15,9 @@ module CommentableActions
     @resources = @resources.search(@search_terms) if @search_terms.present?
     @resources = @resources.filter_by(@advanced_search_terms)
 
-    @resources = @resources.page(params[:page]).send("sort_by_#{@current_order}")
-
     index_customization
+    @resources = @resources.send("sort_by_#{@current_order}")
+    @resources = @resources.page(params[:page])
 
     @tag_cloud = tag_cloud
 
