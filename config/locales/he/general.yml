@@ -60,7 +60,7 @@ he:
       most_voted: הכי הרבה הצבעות
       newest: הכי חדשות
       oldest: הכי מוקדמות
-      most_commented: עם הכי הרבה תגובות
+      most_commented: הכי פעילות
     show:
       return_to_commentable: "חזור אל "
   comments_helper:
@@ -328,7 +328,7 @@ he:
         confidence_score: הכי נתמכת
         created_at: הכי חדשה
         hot_score: הכי פעילה
-        most_commented: עם הכי הרבה תגובות
+        most_commented: הכי פעילות
         relevance: נוגעת לעניין
         archival_date: הועבר לארכיון
         recommendations: המלצות
