@@ -1,6 +1,7 @@
 <% valuation = local_assigns.fetch(:valuation, false) %>
+<% level = local_assigns.fetch(:level, 0) %>
 <% cache [locale_and_user_status(comment), comment, commentable_cache_key(comment.commentable), comment.author] do %>
-  <div id="<%= dom_id(comment) %>" class="comment small-12">
+  <div id="<%= dom_id(comment) %>" class="comment small-12" style="margin-right: <%= level * 32 %>px;">
     <div class="comment-body">
       <% if comment.hidden? %>
         <% if comment.children.size > 0 %>
@@ -96,6 +97,6 @@
       <% end %>
     </div>
 
-    <%= render "comments/comment_list", comments: child_comments_of(comment), valuation: valuation %>
+    <%= render "comments/comment_list", comments: child_comments_of(comment), valuation: valuation, level: level + 1 %>
   </div>
 <% end %>

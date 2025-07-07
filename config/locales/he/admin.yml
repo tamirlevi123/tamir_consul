@@ -12,6 +12,7 @@ he:
       unmark_featured: לא מקודם
       edit: ערוך
       configure: קביעת תצורה
+      block_author: חסימת המגיב
     officing_booth:
       title: "אתה עובד על התא שממוקם ב %{booth}. אם זה אינו נכון, אל תמשיך ופנה לעזרה טלפונית תודה."
     banners:

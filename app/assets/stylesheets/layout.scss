@@ -1710,7 +1710,7 @@ table {
   margin: calc($line-height / 4) 0;
 
   .comment-list {
-    border-left: 1px dashed $border;
+    border-left: none !important;
     display: inline-block;
     padding-left: rem-calc(8);
     width: 100%;
@@ -2386,4 +2386,3 @@ html[dir="rtl"] .proposal-new a[href='/help#proposals'] {
 html[dir="rtl"] .proposal-new legend {
   float: none !important;
 }
-

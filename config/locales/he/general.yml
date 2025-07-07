@@ -35,16 +35,16 @@ he:
         other: "%{count} תגובות"
       responses_show:
         zero: אין תגובות
-        one: "תגובה אחת (הצג)"
-        two: "%{count} תגובות (הצג)"
-        many: "%{count} תגובות (הצג)"
-        other: "%{count} תגובות (הצג)"
+        one: "תגובה אחת (פתח)"
+        two: "%{count} תגובות (פתח)"
+        many: "%{count} תגובות (פתח)"
+        other: "%{count} תגובות (פתח)"
       responses_collapse:
         zero: אין תגובות
-        one: "תגובה אחת (collapse)"
-        two: "%{count} תגובות (collapse)"
-        many: "%{count} תגובות (collapse)"
-        other: "%{count} תגובות (collapse)"
+        one: "תגובה אחת (סגירה)"
+        two: "%{count} תגובות (סגירה)"
+        many: "%{count} תגובות (סגירה)"
+        other: "%{count} תגובות (סגירה)"
       user_deleted: משתמש/ת זה/ו נמחק/ה
       votes:
         zero: אין הצבעות
@@ -357,10 +357,11 @@ he:
         placeholder: חיפוש הצעות ...
         title: חיפוש
       search_results:
-        one: " המכיל את המונחים <strong>'%{search_term}'</strong>"
-        two: " המכיל את המונחים <strong>'%{search_term}'</strong>"
-        many: " המכיל את המונחים <strong>'%{search_term}'</strong>"
-        other: " המכיל את המונחים <strong>'%{search_term}'</strong>"
+        zero: "לא נמצאו הצעות המכילות את המונח <strong>'%{search_term}'</strong>"
+        one: " המכילה את המונח <strong>'%{search_term}'</strong>"
+        two: " המכילות את המונח <strong>'%{search_term}'</strong>"
+        many: "המכילות את המונח <strong>'%{search_term}'</strong>"
+        other: "המכילות את המונח <strong>'%{search_term}'</strong>"
       select_order_long: "ההצעות מוצגות לך על-פי סדר:"
       start_proposal: העל/י הצעה חדשה
       title: הצעות
@@ -655,8 +656,8 @@ he:
     filter: "מיון"
     save: "שמירה"
     delete: "מחיקה"
-    "yes": "כן"
-    "no": "לא"
+    yes: "כן"
+    no: "לא"
     search_results: "תוצאות החיפוש"
     advanced_search:
       date: "לפי תאריך"
@@ -741,181 +742,4 @@ he:
     translations:
       remove_language: הסרת שפה
       add_language: הוספת שפה
-  social:
-    facebook: "%{org} פייסבוק"
-    twitter: "%{org} טוויטר"
-    youtube: "%{org} יוטיוב YouTube"
-    telegram: "%{org} טלגרם Telegram"
-    instagram: "%{org} אינסטגרם Instagram"
-  stats:
-    index:
-      visits: ביקורים
-      debates: דיונים
-      proposals: הצעות
-      comments: הערות
-      proposal_votes: הצבעות על הצעות
-      debate_votes: הצבעות על דיונים
-      comment_votes: הצבעות על תגובות
-      votes: סך הכל הצבעות
-      verified_users: משתמשים מאושרים
-      unverified_users: משתמשים שלא נבדקו
-  unauthorized:
-    default: אין לך הרשאה להיכנס לדף זה.
-    manage:
-      all: "אין לך הרשאה לבצע פעולת '%{action}' על %{subject}."
-  users:
-    login_to_comment: "נדרשת %{signin} או %{signup} בכדי להשאיר תגובה"
-    login_to_continue: "נדרשת %{signin} או %{signup} בכדי להמשיך"
-    signin: "התחברות"
-    signup: "הרשמה"
-    verify_account: "לאמת את החשבון"
-    direct_messages:
-      new:
-        direct_messages_bloqued: "משתמש/ת זה/ו בחר/ה שלא לקבל הודעות ופניות ישירות"
-        submit_button: שליחה
-        title: שליחת הודעה פרטית אל %{receiver}
-        verified_only: כדי שתוכל/י לשלוח הודעה פרטית %{verify_account}
-      show:
-        receiver: ההודעה נשלחה אל %{receiver}
-    show:
-      deleted: מחיקה
-      deleted_debate: דיון זה נמחק
-      deleted_proposal: הצעה זו נמחקה
-      deleted_budget_investment: השקעה זו נמחקה
-      proposals: הצעות
-      proposals_status: מצב
-      debates: דיונים
-      budget_investments: השקעות בתקציב
-      comments: הערות
-      actions: פעולות
-      filters:
-        comments:
-          one: תגובה אחת
-          two: "%{count} תגובות"
-          many: "%{count} תגובות"
-          other: "%{count} תגובות"
-        debates:
-          one: דיון אחד
-          two: "%{count} דיונים"
-          many: "%{count} דיונים"
-          other: "%{count} דיונים"
-        proposals:
-          one: הצעה אחת
-          two: "%{count} הצעות"
-          many: "%{count} הצעות"
-          other: "%{count} הצעות"
-        budget_investments:
-          one: השקעה אחת
-          two: "%{count} השקעות"
-          many: "%{count} השקעות"
-          other: "%{count} השקעות"
-        follows:
-          one: עוקב אחד
-          two: "%{count} עוקבים"
-          many: "%{count} עוקבים"
-          other: "%{count} עוקבים"
-      no_activity: למשתמש/ת זה/ו אין פעילות ציבורית
-      no_private_messages: "משתמש/ת זה/זו אינו/ה מקבל/ת הודעות פרטיות"
-      private_activity: משתמש/ת זה/ו בחר/ה לשמור בסוד את רשימת הפעילויות שלו/ה
-      send_private_message: "שליחת הודעה פרטית"
-      delete_alert: "בטוח שברצונך למחוק את פרויקט ההשקעה שלך? לא ניתן לשחזר פעולה זו"
-    proposals:
-      retired: "פרשת מזה"
-      draft: טיוטה
-      published: פורסם
-      see: "ראה/י הצעות"
-      actions: פעולות
-      retired_help_text: לוח הניהול אינו זמין להצגת הצעות שננטשו
-  votes:
-    agree: מסכים
-    anonymous: יותר מדי קולות אנונימיים לאמת את ההצבעה %{verify_account}.
-    disagree: אני מסתייג
-    organizations: ארגונים אינם רשאים להצביע
-    supports: לחיצה לתמיכה
-    verified_only: רק משתמשים מאומתים יכולים להצביע על הצעות; %{verify_account}.
-    budget_investments:
-      not_verified: רק משתמשים שאומת חשבונם יכולים להצביע על ההצעות; %{verify_account}.
-      unfeasible: לא ניתן לתמוך בפרויקטים שאינם ברי ביצוע
-      not_voting_allowed: שלב ההצבעות נסגר
-      different_heading_assigned:
-        one: "תוכל לתמוך רק בפרויקט להשקעה ברובע %{count}. כבר תמכת בהשקעות ב-%{supported_headings}."
-        two: "תוכל לתמוך רק בפרויקטים להשקעה ברובעים %{count}. כבר תמכת בהשקעות ב-%{supported_headings}."
-        many: "תוכל לתמוך רק בפרויקטים להשקעה ברובעים %{count}. כבר תמכת בהשקעות ב-%{supported_headings}."
-        other: "תוכל לתמוך רק בפרויקטים להשקעה ברובעים %{count}. כבר תמכת בהשקעות ב-%{supported_headings}."
-  welcome:
-    feed:
-      most_active:
-        debates: "הדיונים הכי פעילים"
-        proposals: "ההצעות הכי פעילות"
-        processes: "תהליכים פתוחים"
-      see_all:
-        debates: ראה את כל הדיונים
-        proposals: ראה/י את כל ההצעות
-        processes: ראה את כל התהליכים
-      process_label: תהליכים
-      see_process: ראה תהליכים
-    cards:
-      title: מוצע
-    recommended:
-      title: המלצות שעשויות לעניין אותך
-      help: "המלצות אלה נוצרות על ידי תגי הדיונים וההצעות שאתה עוקב אחריהם."
-      debates:
-        title: דיונים מומלצים
-        btn_text_link: כל הדיונים המומלצים
-      proposals:
-        title: הצעות מומלצות
-        btn_text_link: כל ההצעות המומלצות
-      budget_investments:
-        title: השקעות מומלצות
-      slide: "ראה %{title}"
-    welcome:
-      go_to_index: לצפייה בהצעות ובדיונים
-      start_using_consul: גש לדף הבית
-      title: רוצה להשתתף בזה
-      user_permission_info: עם חשבונך תוכל/י ...
-      user_permission_verify: "כדי לבצע את כל הפעולות, עליך לאמת את חשבונך"
-      user_permission_verify_my_account: אמת את החשבון שלי
-  invisible_captcha:
-    sentence_for_humans: "אם אינך רובוט, נא התעלם משדה זה"
-    timestamp_error_message: "מצטערים, זה היה מהיר מדי, נא לשלוח שוב"
-  related_content:
-    title: "תוכן רלוונטי"
-    add: "הוסף תוכן רלוונטי"
-    label: "קישור לתוכן רלוונטי"
-    placeholder: "%{url}"
-    help: "ניתן להוסיף קישורים ל%{models} בתוך %{org}."
-    submit: "הוסף"
-    error: "הקישור אינו חוקי. זכור להתחיל עם%{url}."
-    error_itself: "הקישור אינו חוקי. אתה לא יכול לקשר תוכן לעצמו."
-    success: "הוספת תוכן קשור חדש"
-    is_related: "האם זה תוכן רלוונטי?"
-    score_positive: "כן"
-    score_negative: "לא"
-    content_title:
-      proposal: "הצעה"
-      debate: "דיון"
-      budget_investment: "השקעת תקציב"
-  admin/widget:
-    header:
-      title: ניהול
-  annotator:
-    help:
-      alt: בחר את הטקסט שברצונך להגיב עליו ולחץ על הלחצן עם העיפרון.
-      text: כדי להגיב על מסמך זה עליך%{sign_in} או%{sign_up}. לאחר מכן בחר את הטקסט שברצונך להגיב ולחץ על הלחצן עם העיפרון.
-      title: איך אני יכול להגיב על מסמך זה?
-  links:
-    form:
-      delete_button: מחיקה
-      cancel_button: ביטול
-    nested_links:
-      title: קישורים
-      note: הוסף את הקישורים בעלי עניין רלוונטי
-      add_new_link: הוסף קישור חדש
-  communities:
-    show:
-      surveys: סקרים
-      complete_survey: השלם את הסקר
-    subnav:
-      surveys: סקרים
-    poll:
-      take_part: קח חלק מ- %{from} ל- %{to}
+    search_results: "תוצאות החיפוש"

@@ -1,0 +1,54 @@
+Project Environment & Workflow Summary
+1. Environments Overview
+Development
+Runs locally using Docker Compose.
+The main app and database are containerized.
+You interact with the app via docker compose up, docker compose exec app bash, etc.
+Asset compilation, migrations, and Rails commands are run inside the app container.
+Source code is edited on the host and mounted into the container.
+Debugging is done with browser DevTools, Rails logs, and by editing files directly.
+Example commands:
+docker compose up
+docker compose exec app bash
+bundle exec rake assets:clobber (inside container)
+bundle exec rake assets:precompile (inside container)
+Testing
+Used for automated and/or manual tests.
+May use a separate Docker Compose file (e.g., docker-compose.testing.yml).
+Database and app are isolated from development and production.
+Test data and migrations are managed independently.
+May run CI/CD pipelines or local test runs in this environment.
+Production
+Runs on a remote server or cloud environment.
+Not containerized by default (unless you have a production Docker setup).
+Uses a production database and environment variables.
+Assets are precompiled and served statically.
+Security, performance, and reliability are prioritized.
+Deployment is typically done via git push, Capistrano, or other deployment tools.
+2. Key Project Details
+Main app directory: /home/tamir/projects/2.3.1
+Legacy/CRC3 project: /home/tamir/projects/CRC3
+Source control: Git, with branches like testing-deploy
+Asset pipeline: Rails Sprockets (JS/CSS managed via manifest files)
+Database: PostgreSQL (containerized in dev/testing)
+Migrations: Managed via Rails, reflected in db/schema.rb
+JS Debugging: Use of defensive checks for App.*.initialize() to prevent missing modules from breaking the app
+Annotation system: Comments, author, and date display logic is in ERB partials (e.g., app/views/legislation/annotations/_comments.html.erb)
+Typical workflow:
+Edit code locally
+Rebuild/restart Docker containers as needed
+Precompile assets inside the container
+Test in browser
+Commit and push changes to GitHub
+3. Special Notes
+Permissions: Sometimes you may need to fix file permissions (e.g., with chown -R) if you see EACCES errors.
+Asset issues: If JS/CSS changes don’t show up, always try assets:clobber and assets:precompile inside the container, then hard refresh the browser.
+Untracked files: Be mindful of new files not yet added to git, especially in migrations or new features.
+Legacy code: When upgrading from CRC3, check for missing features or markup by comparing ERB partials and JS logic.
+4. How to Start Contextless
+If you ever need to start from scratch or explain your setup to a new developer (or AI assistant), provide:
+The environment you’re working in (dev, test, prod)
+Whether you’re using Docker or not
+The main app directory and any legacy directories
+The branch you’re working on
+Any recent changes to the asset pipeline, migrations, or deployment process

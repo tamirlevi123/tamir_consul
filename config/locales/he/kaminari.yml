@@ -11,11 +11,11 @@ he:
         display_entries: מציג <b>%{first}&nbsp;-&nbsp;%{last}</b> מתוך<b>%{total}</b> %{entry_name}
       one_page:
         display_entries:
-          zero: "%{entry_name} לא נמצא"
+          zero: ""
           one: יש <strong>1 %{entry_name}</strong>
-          two: ישנם <strong>%{count} %{entry_name}</strong>
-          many: ישנם <strong>%{count} %{entry_name}</strong>
-          other: ישנם <strong>%{count} %{entry_name}</strong>
+          two: ישנן <strong>%{count} %{entry_name}</strong>
+          many: ישנן <strong>%{count} %{entry_name}</strong>
+          other: ישנן <strong>%{count} %{entry_name}</strong>
   views:
     pagination:
       current: את/ה נמצא/ת בדף

@@ -44,7 +44,7 @@ he:
         description: תיאור
         more_info: למידע נוסף, והקשר
       proposals:
-        empty_proposals: לא נמצאו הצעות
+        empty_proposals: לא נמצאה אף הצעה
         filters:
           random: אקראי
           winners: נבחר

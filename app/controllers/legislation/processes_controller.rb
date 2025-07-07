@@ -12,7 +12,6 @@ class Legislation::ProcessesController < Legislation::BaseController
     @current_filter ||= "open"
     @processes = ::Legislation::Process.send(@current_filter)
                                        .published
-                                       .not_in_draft
                                        .order(start_date: :desc)
                                        .page(params[:page])
   end

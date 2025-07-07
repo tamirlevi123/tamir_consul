@@ -115,10 +115,10 @@ he:
         many: גיליון הצבעות
         other: גיליון הצבעות
       proposal:
-        one: "הצעת תושב"
-        two: "הצעת תושבים"
-        many: "הצעת תושבים"
-        other: "הצעת תושבים"
+        one: "הצעה"
+        two: "הצעות"
+        many: "הצעות"
+        other: "הצעות"
       site_customization/page:
         one: דף מותאם אישית
         two: דפים מותאמים אישית
