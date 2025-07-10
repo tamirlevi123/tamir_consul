@@ -7,6 +7,6 @@ class Shared::CommentsCountComponent < ApplicationComponent
   end
 
   def text
-    t("shared.comments", count: comments_count)
+    t("comments.comment.responses", count: comments_count)
   end
 end
