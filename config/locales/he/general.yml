@@ -743,3 +743,36 @@ he:
       remove_language: הסרת שפה
       add_language: הוספת שפה
     search_results: "תוצאות החיפוש"
+  users:
+    show:
+      filters:
+        comments: "תגובות"
+        debates: "דיונים"
+        proposals: "הצעות"
+        budget_investments: "השקעות"
+        follows: "עוקבים"
+        comments:
+          zero: "אין תגובות"
+          one: "תגובה אחת"
+          other: "%{count} תגובות"
+        debates:
+          zero: "אין דיונים"
+          one: "דיון אחד"
+          other: "%{count} דיונים"
+        proposals:
+          zero: "אין הצעות"
+          one: "הצעה אחת"
+          other: "%{count} הצעות"
+        budget_investments:
+          zero: "אין השקעות"
+          one: "השקעה אחת"
+          other: "%{count} השקעות"
+        follows:
+          zero: "אין עוקבים"
+          one: "עוקב אחד"
+          other: "%{count} עוקבים"
+      no_activity: למשתמש אין פעילות ציבורית
+      no_private_messages: "משתמש זה לא מקבל הודעות פרטיות."
+      private_activity: משתמש זה החליט לשמור על רשימת הפעילות פרטית.
+      send_private_message: "שלח הודעה פרטית"
+      delete_alert: "האם אתה בטוח שברצונך למחוק את פרויקט ההשקעה שלך? פעולה זו לא ניתנת לביטול"
