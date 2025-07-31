@@ -1,10 +1,13 @@
-<p>
-  <% if notification && notification.notifiable_action %>
+<% if notification && notification.notifiable_action %>
+  <p>
     <em>
       <%= t("notifications.notification.action.#{notification.notifiable_action}",
             count: notification.counter) %>
     </em>
-  <% end %>
+  </p>
+<% end %>
+
+<p>
   <strong id="<%= dom_id(notification) if notification %>_title">
     <%= title %>
   </strong>

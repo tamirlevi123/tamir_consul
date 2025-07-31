@@ -13,7 +13,7 @@
       </strong>
     </p>
   <% end %>
-
+  
   <% if notification.unread? %>
     <%= link_to t("notifications.notification.mark_as_read"),
                 mark_as_read_notification_path(notification),

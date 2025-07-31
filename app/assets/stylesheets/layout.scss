@@ -1198,9 +1198,9 @@ form {
   @include breakpoint(medium) {
 
     .mark-notification {
-      position: absolute;
-      right: 12px;
-      top: 12px;
+      display: block;
+      margin-top: 8px;
+      text-align: right;
     }
   }
 
@@ -1245,7 +1245,7 @@ form {
 
   p {
     margin-bottom: 0;
-    max-width: 80%;
+    max-width: 100%;
   }
 
   .time {
