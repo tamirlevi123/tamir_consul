@@ -1,0 +1,34 @@
+// Fix for English author names in RTL layout
+// This ensures that author names always follow the RTL flow regardless of language
+
+.proposal-info,
+.debate-info,
+.investment-project-info,
+.topic-info {
+  .author {
+    // Force RTL direction for author names
+    direction: rtl;
+    unicode-bidi: embed;
+    
+    a {
+      // Ensure the link also follows RTL
+      direction: rtl;
+      unicode-bidi: embed;
+    }
+  }
+}
+
+// Alternative approach: Use logical properties for better RTL support
+.proposal-info,
+.debate-info,
+.investment-project-info,
+.topic-info {
+  .author {
+    // Use logical properties that work better with RTL
+    text-align: start;
+    
+    a {
+      text-align: start;
+    }
+  }
+} 
