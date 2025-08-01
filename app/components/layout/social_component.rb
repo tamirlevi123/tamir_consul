@@ -9,7 +9,7 @@ class Layout::SocialComponent < ApplicationComponent
 
     def sites
       {
-        twitter: "https://twitter.com",
+        twitter: "https://x.com",
         facebook: "https://www.facebook.com",
         youtube: "https://www.youtube.com",
         telegram: "https://www.telegram.me",

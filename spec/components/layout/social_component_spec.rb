@@ -13,7 +13,7 @@ describe Layout::SocialComponent do
       render_inline Layout::SocialComponent.new
 
       expect(page).to have_css "ul"
-      expect(page).to have_link "CONSUL Twitter", href: "https://twitter.com/my_twitter_handle"
+      expect(page).to have_link "CONSUL Twitter", href: "https://x.com/my_twitter_handle"
       expect(page).to have_link "CONSUL Facebook", href: "https://www.facebook.com/my_facebook_handle"
       expect(page).to have_link "CONSUL YouTube", href: "https://www.youtube.com/my_youtube_handle"
       expect(page).to have_link "CONSUL Telegram", href: "https://www.telegram.me/my_telegram_handle"
