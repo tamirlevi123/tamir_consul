@@ -142,6 +142,12 @@
     }
   }
 
+  // RTL-specific: Override legend alignment for Hebrew/RTL
+  html[dir="rtl"] & > fieldset > legend {
+    float: none !important;
+    text-align: right !important;
+  }
+
   select {
     min-height: $line-height * 2;
 

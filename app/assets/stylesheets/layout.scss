@@ -2385,8 +2385,3 @@ html[dir="rtl"] .proposal-new header a[href='/how'] {
   margin-right: 20%;
   color: white !important;
 }
-
-// RTL-specific: Remove float from legend in proposal-new
-html[dir="rtl"] .proposal-new legend {
-  float: none !important;
-}
