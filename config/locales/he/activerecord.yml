@@ -312,6 +312,7 @@ he:
         retired_reason: "הסיבה להסרת ההצעה"
         selected: "סמן כנבחר"
         terms_of_service: "תנאי השימוש"
+        video_url: "קישור לוידאו חיצוני"
       proposal/translation:
         title: "כותרת ההצעה"
         description: "מלל ההצעה"
@@ -498,7 +499,7 @@ he:
         description: "תיאור"
       poll/question/answer/video:
         title: כותרת
-        url: מקור וידאו חיצוני
+        url: קישור לוידאו חיצוני
       newsletter:
         segment_recipient: נמענים
         subject: נושא

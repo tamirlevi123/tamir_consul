@@ -1038,7 +1038,7 @@ he:
         edit_question: ערוך שאלה
         valid_answers: תשובות חוקיות
         add_answer: הוסף שאלה
-        video_url: מקור וידאו חיצוני
+        video_url: קישור לוידאו חיצוני
         answers:
           title: תשובה
           description: תיאור
@@ -1060,7 +1060,7 @@ he:
           title: וידאו
           add_video: הוסף וידאו
           video_title: כותרת
-          video_url: מקור וידאו חיצוני
+          video_url: קישור לוידאו חיצוני
         new:
           title: וידאו חדש
         edit:

@@ -1,0 +1,31 @@
+// Fix for proposal new page link styling
+// Ensures the link has proper underline styling and color
+
+.proposal-new {
+  header {
+    a {
+      // Force underline for the help link
+      text-decoration: underline !important;
+
+      // Ensure proper color
+      color: #004883 !important;
+
+      // Add hover effect
+      &:hover {
+        text-decoration: underline !important;
+        color: #003366 !important;
+      }
+    }
+  }
+}
+
+// Target the specific link more specifically
+.proposal-new header a[href="/how"] {
+  text-decoration: underline !important;
+  color: #004883 !important;
+
+  &:hover {
+    text-decoration: underline !important;
+    color: #003366 !important;
+  }
+} 

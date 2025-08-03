@@ -2381,6 +2381,10 @@ html[dir="rtl"] body .proposal-new header::before {
 html[dir="rtl"] .proposal-new a[href='/help#proposals'] {
   margin-right: 20%;
 }
+html[dir="rtl"] .proposal-new header a[href='/how'] {
+  margin-right: 20%;
+  color: white !important;
+}
 
 // RTL-specific: Remove float from legend in proposal-new
 html[dir="rtl"] .proposal-new legend {
