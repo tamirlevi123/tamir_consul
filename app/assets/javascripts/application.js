@@ -100,6 +100,7 @@
 //= require flaggable
 //= require documentable
 //= require imageable
+//= require globalize
 //= require tree_navigator
 //= require tag_autocomplete
 //= require leaflet/dist/leaflet

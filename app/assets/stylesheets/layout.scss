@@ -2385,3 +2385,9 @@ html[dir="rtl"] .proposal-new header a[href='/how'] {
   margin-right: 20%;
   color: white !important;
 }
+
+// RTL-specific: Fix language selection layout
+html[dir="rtl"] .globalize-languages .end {
+  float: right !important;
+  display: block !important;
+}
