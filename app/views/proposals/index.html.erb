@@ -20,8 +20,6 @@
       <h2><%= t("proposals.index.selected_proposals") %></h2>
     <% end %>
   <% end %>
-<% else %>
-  <%= render "shared/section_header", i18n_namespace: "proposals.index.section_header", image: "proposals" %>
 <% end %>
 
 <% if show_recommended_proposals? %>
@@ -51,17 +49,13 @@
     <% unless params[:selected].present? %>
       <div class="row">
         <div class="small-12 column">
-          <%= render "view_mode" %>
+          <%= render "shared/order_links", i18n_namespace: "proposals.index" %>
         </div>
       </div>
     <% end %>
 
     <% unless params[:retired].present? || params[:selected].present? %>
       <%= render Shared::AdvancedSearchComponent.new %>
-    <% end %>
-
-    <% unless params[:selected].present? %>
-      <%= render "shared/order_links", i18n_namespace: "proposals.index" %>
     <% end %>
 
     <% if @proposals.any? %>

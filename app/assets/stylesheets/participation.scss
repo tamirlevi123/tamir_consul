@@ -722,6 +722,27 @@
   }
 }
 
+ul.order-links {
+  display: flex !important;
+  align-items: center !important;
+  
+  .view-mode-toggle {
+    margin-left: auto !important;
+    
+    .view-mode {
+      margin-bottom: 0;
+      margin-top: 0;
+      float: none !important;
+      display: inline-block;
+    }
+  }
+}
+
+// Override vendor float-right rule specifically for view mode
+ul.order-links .view-mode-toggle .float-right.view-mode.default {
+  float: none !important;
+}
+
 .view-mode {
 
   ul {

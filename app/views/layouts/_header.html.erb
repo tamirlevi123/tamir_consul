@@ -1,13 +1,4 @@
 <header>
-  <%= render Layout::RemoteTranslationsButtonComponent.new(@remote_translations) %>
-
-  <div class="top-links">
-    <%= render Layout::LocaleSwitcherComponent.new %>
-    <div class="hide-for-small-only">
-      <%= render Layout::TopLinksComponent.new %>
-    </div>
-  </div>
-
   <div class="top-bar">
     <h1>
       <%= link_to root_path, accesskey: "0" do %>
@@ -21,7 +12,6 @@
       <div class="show-for-small-only">
         <div class="subnavigation subnavigation-with-top-links">
           <%= render Layout::SubnavigationComponent.new %>
-          <%= render Layout::TopLinksComponent.new %>
         </div>
       </div>
     <% end %>
@@ -29,7 +19,32 @@
 
   <div id="navigation_bar" class="subnavigation">
     <div class="hide-for-small-only">
-      <%= render Layout::SubnavigationComponent.new %>
+      <nav>
+        <ul>
+          <% if feature?(:proposals) %>
+            <li>
+              <%= layout_menu_link_to t("layouts.header.proposals"),
+                                      proposals_path,
+                                      controller.class == ProposalsController,
+                                      accesskey: "2" %>
+            </li>
+          <% end %>
+          <% if feature?(:legislation) %>
+            <li>
+              <%= layout_menu_link_to t("layouts.header.collaborative_legislation"),
+                                      legislation_processes_path,
+                                      controller.class.module_parent == Legislation,
+                                      accesskey: "4" %>
+            </li>
+          <% end %>
+          <li>
+            <%= layout_menu_link_to t("layouts.header.help"),
+                                    "/how",
+                                    current_page?("/how"),
+                                    accesskey: "7" %>
+          </li>
+        </ul>
+      </nav>
     </div>
 
     <%= yield :header_addon %>
