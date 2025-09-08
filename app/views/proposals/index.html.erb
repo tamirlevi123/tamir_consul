@@ -85,7 +85,7 @@
           <p class="lead">
             <strong><%= t("proposals.index.section_footer.title") %></strong>
           </p>
-          <p><%= sanitize(t("proposals.index.section_footer.description")) %></p>
+          <p><%= AdminWYSIWYGSanitizer.new.sanitize(t("proposals.index.section_footer.description")) %></p>
         </div>
       <% end %>
     </div>

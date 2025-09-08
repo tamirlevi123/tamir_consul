@@ -95,11 +95,11 @@ h6 {
   font-weight: 700;
 }
 
-p {
-  font-size: $base-font-size;
-  font-weight: 400;
-  line-height: $base-line;
-}
+// p {
+//   font-size: $base-font-size;
+//   font-weight: 400;
+//   line-height: $base-line;
+// }
 
 a {
   @include link;
