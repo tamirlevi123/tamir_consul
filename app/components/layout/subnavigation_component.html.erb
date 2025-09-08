@@ -26,6 +26,10 @@
                                 accesskey: "3" %>
       </li>
     <% end %>
+    <!-- Force polls link to show -->
+    <li style="display: block !important;">
+      <a href="/polls" class="<%= 'is-active' if controller_name == 'polls' %>">סקרים</a>
+    </li>
     <% if feature?(:legislation) %>
       <li>
         <%= layout_menu_link_to t("layouts.header.collaborative_legislation"),

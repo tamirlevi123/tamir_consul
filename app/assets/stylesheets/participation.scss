@@ -725,9 +725,13 @@
 ul.order-links {
   display: flex !important;
   align-items: center !important;
+  flex-direction: row !important; // Ensure left-to-right flow in RTL
   
   .view-mode-toggle {
-    margin-left: auto !important;
+    margin-right: auto !important; // Use margin-right for RTL layout
+    display: block !important; // Override inline-block to make it a proper flex item
+    text-align: left !important; // Override any text-align rules
+    float: none !important; // Ensure no float rules interfere
     
     .view-mode {
       margin-bottom: 0;
